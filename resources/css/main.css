@@ -1,5 +1,67 @@
 body{
-    background: #000000;
+    background: url('../image/background.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
     font-family: 'Courier New', Courier, monospace;
     font-size: 12px;
+    margin: 0px auto;
+}
+
+/**
+* Container for svg logo
+*/
+.logo{
+    position: absolute;
+    top: 0px;
+    left: 230px;
+    width: 1480px;
+    height: 100px;
+    background: lightgreen;
+}
+/**
+* Main wrapper
+*/
+.container{
+    position: absolute;
+    top: 100px;
+    left: 230px;
+    width: 1480px;
+    height: 1000px;
+    background: #dddddd;
+    overflow: hidden;
+}
+/**
+* Menu Bar
+*/
+.menu{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 50px;
+    width: 1480px;
+    background: slateblue;
+
+}
+/**
+* Main Page
+*/
+.page{
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    width: 1400px;
+    height: 950px;
+    background: #ffffff;
+    overflow: scroll;
+}
+/**
+* Page Footer
+*/
+.page_footer{
+    position: absolute;
+    top: 1100px;
+    left: 230px;
+    width: 1480px;
+    height: 200px;
+    background: darkolivegreen;
 }
