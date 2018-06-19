@@ -34,7 +34,7 @@ body{
     left: 15%;
     width: 70%;
     height: 100%;
-    background: #dddddd;
+    background: linear-gradient(to bottom, rgba(10, 10, 10, 0.5), rgba(50, 20, 50, 0.5));
     overflow: hidden;
 }
 /**
