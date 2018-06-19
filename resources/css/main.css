@@ -1,10 +1,17 @@
+*{
+    box-sizing: border-box;
+}
+
+.container::after{
+    content: "";
+    clear: both;
+    display: table;
+}
+
 body{
-    background: url('../image/background.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
+    background:  slategray;
     font-family: 'Courier New', Courier, monospace;
     font-size: 12px;
-    margin: 0px auto;
 }
 
 /**
@@ -12,10 +19,10 @@ body{
 */
 .logo{
     position: absolute;
-    top: 0px;
-    left: 230px;
-    width: 1480px;
-    height: 100px;
+    top: 0%;
+    left: 15%;
+    width: 70%;
+    height: 10%;
     background: lightgreen;
 }
 /**
@@ -23,10 +30,10 @@ body{
 */
 .container{
     position: absolute;
-    top: 100px;
-    left: 230px;
-    width: 1480px;
-    height: 1000px;
+    top: 10%;
+    left: 15%;
+    width: 70%;
+    height: 100%;
     background: #dddddd;
     overflow: hidden;
 }
@@ -35,10 +42,10 @@ body{
 */
 .menu{
     position: absolute;
-    top: 0px;
-    left: 0px;
-    height: 50px;
-    width: 1480px;
+    top: 0%;
+    left: 0%;
+    height: 5%;
+    width: 100%;
     background: slateblue;
 
 }
@@ -47,10 +54,10 @@ body{
 */
 .page{
     position: absolute;
-    top: 50px;
-    left: 40px;
-    width: 1400px;
-    height: 950px;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
     background: #ffffff;
     overflow: scroll;
 }
@@ -59,9 +66,9 @@ body{
 */
 .page_footer{
     position: absolute;
-    top: 1100px;
-    left: 230px;
-    width: 1480px;
-    height: 200px;
+    top: 95%;
+    left: 0%;
+    width: 100%;
+    height: 10%;
     background: darkolivegreen;
 }
