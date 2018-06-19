@@ -11,6 +11,20 @@
         height="100%" 
         fill="royalblue"
     />
-    <path 
+    <path
+        d = "M10, 10 
+        L100, 10
+        L100, 20
+        L80, 20
+        L80, 90
+        L100, 90
+        L100, 100
+        L10, 100
+        L10, 90
+        L40, 90
+        L40, 10
+        L10, 10
+        Z"
+        style="stroke: none; fill: lightgray; id: ibeam"
     />
 </svg>
