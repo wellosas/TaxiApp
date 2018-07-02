@@ -12,7 +12,7 @@ html {
 
 body {
     background: radial-gradient(circle, rgba(10, 10, 10, 0.75), rgba(20, 20, 20, 0.75));
-    margin: 30px 50px;
+    margin: 10px 20px;
     line-height: 1.4;
 }
 /*
@@ -125,12 +125,15 @@ h1.header {
 .beam-card {
     grid-area: beam-card;
     background: #ddd;
+    box-shadow: var(--shadow);
 }
 .report {
     grid-area: report;
     background: #ddd;
+    box-shadow: var(--shadow);
 }
 .graph {
     grid-area: graph;
     background: #ddd;
+    box-shadow: var(--shadow);
 }
