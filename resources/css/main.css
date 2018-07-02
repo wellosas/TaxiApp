@@ -34,8 +34,8 @@ body {
 }
 
 h1.header {
-    background: radial-gradient(circle, steelblue, slategray);
     text-align: center;
+    font-size: 14px;
     width: 100%;
 }
 .main-nav {
@@ -84,6 +84,10 @@ h1.header {
 
 .header {
     grid-area: header;
+    background: radial-gradient(circle, steelblue, slategray);
+    align-items: center;
+    color: var(--light);
+    text-shadow: var(--shadow);
 }
 
 .main-nav {
