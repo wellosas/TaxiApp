@@ -12,7 +12,7 @@ html {
 
 body {
     background: radial-gradient(circle, rgba(10, 10, 10, 0.75), rgba(20, 20, 20, 0.75));
-    margin: 10px 20px;
+    margin: 10px 5px;
     line-height: 1.4;
 }
 /*
@@ -30,6 +30,7 @@ body {
         "footer footer footer footer footer";
     align-items: stretch;
     width: 100%;
+    height: 100%;
     background: linear-gradient(to left,
         rgba(255, 200, 255, 0.5), rgba(200, 255, 200, 0.5)
     );
@@ -116,26 +117,22 @@ h1.header {
 .pageContent {
     display: grid;
     grid-gap: 10px;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas:
-        "graph"
-        "beam-card"
-        "report";
+        "graph beam-card report";
     align-items: stretch;
 }
 
 .beam-card {
     grid-area: beam-card;
-    background: #ddd;
     box-shadow: var(--shadow);
+    width: 100%;
 }
 .report {
     grid-area: report;
-    background: #ddd;
     box-shadow: var(--shadow);
 }
 .graph {
     grid-area: graph;
-    background: #ddd;
     box-shadow: var(--shadow);
 }

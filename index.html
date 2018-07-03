@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Stress-Strain Analysis</title>
     <link rel="stylesheet" href="./resources/css/main.css">
+    <script src="./resources/lib/d3/d3.js"></script>
 </head>
 <body>
     <div class="container">
@@ -25,32 +26,34 @@
             <div class="pageContent">
                 <div class="beam-card" id="beam-card">
                     <svg class="beam-card" id="beam-card"
-                        viewBox="0 0 10 10"
                         width="100%"
-                        height="33.33%" 
+                        height="100%" 
                         xmlns="http://www.w3.org/2000/svg" 
                         xmlns:xlink="http://www.w3.org/1999/xlink" 
                         baseProfile="Full" version="1.1">
+                        <rect class="beamProfile" width="460" height="460" fill="#ccc" stroke="#ddd"></rect>
                     </svg>
                 </div>
                 <div class="graph" id="graph">
                     <svg class="graph" id="graph"
-                        viewBox="0 0 10 10"
+                        viewBox="0 0 100 100"
                         width="100%"
-                        height="33.33%" 
+                        height="100%" 
                         xmlns="http://www.w3.org/2000/svg" 
                         xmlns:xlink="http://www.w3.org/1999/xlink" 
                         baseProfile="Full" version="1.1">
+                        <rect class="beamGraph" width="460" height="460" fill="#ccc" stroke="#ddd"></rect>
                     </svg>
                 </div>
                 <div class="report" id="report">
                     <svg class="report" id="report"
-                        viewBox="0 0 10 10"
+                        viewBox="0 0 100 100"
                         width="100%"
-                        height="33.33%"
+                        height="100%"
                         xmlns="http://www.w3.org/2000/svg" 
                         xmlns:xlink="http://www.w3.org/1999/xlink" 
                         baseProfile="Full" version="1.1">
+                        <rect class="beamReport" width="460" height="460" fill="#ccc" stroke="#ddd"></rect>
                     </svg>
                 </div>
             </div>
