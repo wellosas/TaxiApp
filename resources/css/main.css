@@ -22,11 +22,12 @@ body {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: 50px auto auto 50px;
+    grid-template-rows: 50px auto auto  auto 50px;
     grid-template-areas: 
         "header header header header header"
         "main-nav main-nav main-nav main-nav main-nav"
-        "sideMenu content content content content"
+        "sideMenu sideMenu sideMenu sideMenu sideMenu"
+        "content content content content content"
         "footer footer footer footer footer";
     align-items: stretch;
     width: 100%;
@@ -117,10 +118,9 @@ h1.header {
 .pageContent {
     display: grid;
     grid-gap: 10px;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-areas:
-        "graph beam-card report";
-    align-items: stretch;
+        "beam-card";
 }
 
 .beam-card {
