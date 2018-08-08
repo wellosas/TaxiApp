@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Stress-Strain Analysis</title>
     <link rel="stylesheet" href="./resources/css/main.css">
-    <script src="./resources/lib/d3/d3.js"></script>
 </head>
 <body>
     <div class="container">
@@ -20,42 +19,25 @@
             </ul>
         </nav>
         <div class="sideMenu">
-            <h3 style="text-align: center"> Page under development</h3>
+            <label for="beam_shape">Shape</label>
+            <select name="beam" id="beam_shape">
+                <option value="W">W</option>
+                <option value="C">C</option>
+            </select>
+            <label for="beam_designation">Beam Designation</label>
+            <select name="beam_designation" id="beam_designation">
+                <option value="W920x967">W920x967</option>
+            </select>
         </div>
         <section class="content" id="content">
             <div class="pageContent">
-                <div class="beam-card" id="beam-card">
-                    <svg class="beam-card" id="beam-card"
-                        
-                        xmlns="http://www.w3.org/2000/svg" 
-                        xmlns:xlink="http://www.w3.org/1999/xlink" 
-                        baseProfile="Full" version="1.1">
-                        <rect class="beamProfile"></rect>
-                    </svg>
-                </div>
-                
-                <div class="graph" id="graph">
-                    <svg class="graph" id="graph"
-                       
-                        xmlns="http://www.w3.org/2000/svg" 
-                        xmlns:xlink="http://www.w3.org/1999/xlink" 
-                        baseProfile="Full" version="1.1">
-                        <rect class="beamGraph" ></rect>
-                    </svg>
-                </div>
-                <div class="report" id="report">
-                    <svg class="report" id="report"
-                        
-                        xmlns="http://www.w3.org/2000/svg" 
-                        xmlns:xlink="http://www.w3.org/1999/xlink" 
-                        baseProfile="Full" version="1.1">
-                        <rect class="beamReport beamReportMedia_420"></rect>
-                    </svg>
-                </div>
+                <div class="beam-card" id="beam-card"></div>                
+                <div class="graph" id="graph"></div>
+                <div class="report" id="report"></div>
             </div>
         </section>
         <footer class="footer"></footer>
     </div>
-    <script src="./resources/js/main.js"></script>
+    <script data-main="resources/js/app" src="resources/js/lib/requirejs/require.js"></script>
 </body>
 </html>
