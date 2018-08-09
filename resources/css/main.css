@@ -12,7 +12,8 @@ html {
 }
 
 body {
-    background: radial-gradient(circle, rgba(10, 10, 10, 0.75), rgba(20, 20, 20, 0.75));
+    background-image: radial-gradient(circle, rgba(10, 10, 10, 0.125), rgba(90, 90, 20, 0.25)),
+        url("../img/beam_profile.svg");
     margin: 10px 0px;
     line-height: 1.4;
 }
