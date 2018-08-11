@@ -9,15 +9,74 @@
     <!-- Background Fram -->
     <style>
         rect {
-            fill: lightblue;
+            fill: lightgreen;
+            fill-opacity: 0.5;
             stroke: #ccc;
             stroke-width: 1px;
         }
         path {
-            fill: #ddd;
-            stroke: royalblue;
+            fill: slategray;
+            stroke: indigo;
         }
     </style>
+    <defs class="defs">
+        <g id="ibeam">
+            <path id="beam"
+                d = "M2,2
+                    L22,2
+                    L22,7
+                    L14.5,7
+                    L14.5,17
+                    L22,17
+                    L22,22
+                    L2,22
+                    L2,17
+                    L9.5,17
+                    L9.5,7
+                    L2,7
+                Z"
+            />
+        </g>
+        <g id="tbeam">
+            <path id="beam" 
+                d="M2,2 
+                L22,2
+                L22,7
+                L14.5,7
+                L14.5,22
+                L9.5,22
+                L9.5,7
+                L2,7
+                Z">
+            </path>
+        </g>
+        <g id="cChannel">
+            <path id="beam" d="M2,2
+                L22,2
+                L22,7
+                L7,7
+                L7,17
+                L22,17
+                L22,22
+                L2,22
+                L2,2 Z">
+            </path>
+        </g>
+        <g id="hss">
+            <path id="beam" fill-rule="evenodd" d="M2,2 
+                L22,2
+                L22,22
+                L2,22
+                L2,2 Z">
+            </path>
+            <path id="beam" fill-rule="evenodd" d="M7,7 
+                L7,17
+                L17,17
+                L17,7
+                L7,7 Z">
+            </path>
+        </g>
+    </defs>
     <rect 
         class="nd1"
         x="0" 
@@ -27,36 +86,25 @@
         fill="slategray"
     />
     <rect class="nd2" 
-    x="24px" 
-    y="0" 
-    width="24" 
-    height="24">
+        x="24px" 
+        y="0" 
+        width="24" 
+        height="24">
     </rect>
     <rect class="dn3" 
-    x="0"
-    y="24px"
-    width="24px"
-    height="24px">
+        x="0"
+        y="24px"
+        width="24px"
+        height="24px">
     </rect>
     <rect class="dn4" 
-    x="24"
-    y="24px"
-    width="24px"
-    height="24px">
+        x="24"
+        y="24px"
+        width="24px"
+        height="24px">
     </rect>
-    <path
-        d = "M2,2
-            L22,2
-            L22,7
-            L14.5,7
-            L14.5,17
-            L22,17
-            L22,22
-            L2,22
-            L2,17
-            L9.5,17
-            L9.5,7
-            L2,7
-        Z"
-    />
+    <use xlink:href="#ibeam" x="0" y="0" />
+    <use xlink:href="#tbeam" x="24" y="0" />
+    <use xlink:href="#cChannel" x="0" y="24" />
+    <use xlink:href="#hss" x="24" y="24" />
 </svg>

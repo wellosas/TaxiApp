@@ -17,6 +17,9 @@ body {
     margin: 10px 0px;
     line-height: 1.4;
 }
+select {
+    font-size: 10px;
+}
 /*
 *   Main Container for screen 360 x 640 Galaxy s5
 */

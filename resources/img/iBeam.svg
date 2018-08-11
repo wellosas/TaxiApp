@@ -1,0 +1,20 @@
+<svg id="beam" class="iBeam"
+    baseProfile="full"
+    width="200"
+    height="200"
+    viewBox="0 0 200 200"
+    preserveAspectRatio="xMinYmin meet"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <style>
+        svg{
+            border: 2px inset #000;
+            border-radius: 10px;
+            background: transparent;
+        }
+    </style>
+    <title>I-Beam Profile</title>
+    <script>
+    </script>
+</svg>
