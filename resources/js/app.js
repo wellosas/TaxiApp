@@ -3,10 +3,8 @@ requirejs.config({
     paths: 'd3/d3'
 });
 
-requirejs(['lib/d3/d3', 'beamProfile' , 'report' ,'graph'], function(d3, beamProfile, report ,graph) {
-    console.log(beamProfile);
-    beamProfile.SVGBeamProfile();
-    beamProfile.initIbeam();
+requirejs(['lib/d3/d3', 'beamProfile' , 'report' ,'graph', 'selectOptionList'], function(d3, beamProfile, report ,graph, selectOptionList) {
     report.SVGBeamReport();
     graph.SVGGraph();
+    selectOptionList.sel();
 });

@@ -19,16 +19,23 @@
             </ul>
         </nav>
         <div class="sideMenu">
-            <label for="beam_shape">Shape</label>
-            <select name="beam" id="beam_shape">
-                <option value="W">W</option>
-                <option value="C">C</option>
-            </select>
-            <label for="beam_designation">Beam Designation</label>
-            <select name="beam_designation" id="beam_designation">
-                <option value="W920x967">W920x967</option>
-            </select>
-            <!--<iframe src="./resources/img/iBeam.svg" frameborder="0" width="200" height="200"></iframe>-->
+            <label for="sys_int_units" class="siu" id="siu">Units:
+                <select name="sys_int_units" id="sys_int_units">
+                    <option value="none">Please select</option>
+                    <option value="mm">mm</option>
+                    <option value="inches">inches</option>
+                </select>
+            </label>
+           
+            <label for="beam_shape" class="shapes">Shape:
+                <select name="beam_shape" id="beam_shape"></select>
+            </label>
+            <label for="beam_designation" class="desig">Desig:
+                <select name="beam_designation" id="beam_designation">
+                    <option value="W920x967">W920x967</option>
+                </select>
+            </label>
+            <svg class="beam" id="beam" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" baseProfile="full" style="position: relative; top: 10px; left: 20px;"></svg>
         </div>
         <section class="content" id="content">
             <div class="pageContent">
