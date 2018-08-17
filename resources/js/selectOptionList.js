@@ -25,7 +25,6 @@ define([
                 newOption.value = pair[0];
                 newOption.innerHTML = pair[1];
                 s2.options.add(newOption);
-                console.log('pair => ', pair[1]);
             }
         }
             
