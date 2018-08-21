@@ -180,8 +180,10 @@ h1.header {
     border: 0.5px dotted #333;
 }
 
-svg.beam {
-    background: rgba(108, 108,108, 0.85);
+svg{
+    background: rgba(255, 255, 250, 0.25);
+    border: #000 solid 0.5px;
+    shape-rendering: crispEdges;/* geometricPrecision, optimizeSpeed;*/
 }
 /*
 @media only screen and (max-width: 420px){

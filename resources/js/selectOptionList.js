@@ -10,8 +10,6 @@ define([
             });        
         },
         changeEventHandler: function(s1, s2) {
-            beamProfile.initIbeam();
-
             s1 = document.querySelector('#sys_int_units');
             s2 = document.querySelector('#beam_shape');
             s2.innerHTML = "";
@@ -25,6 +23,35 @@ define([
                 newOption.value = pair[0];
                 newOption.innerHTML = pair[1];
                 s2.options.add(newOption);
+            }
+        },
+        selectOptionBeamShapeMetric: function() {
+            document.querySelector('#beam_shape').addEventListener('change', () => {
+                this.onChangeBeamShapeMetric();
+            }, false);
+        },
+        onChangeBeamShapeMetric: function(s1 , s2) {
+            beamProfile.initIbeam();
+            s1 = document.querySelector('#beam_shape');
+            s2 = document.querySelector('#beam_designation');
+            console.dirxml('on change event => ', s1, s2);
+
+            s2.innerHTML = "";
+            if (s1.value == ""){
+                return;
+            }else if (s1.value == "w") {
+                var optionListArray = [
+                    "|", 
+                    "w920x967|W920x967",
+                    "w920x784|W920x784"
+                ];
+                for(let optionList in optionListArray){
+                    var pair = optionListArray[optionList].split("|");
+                    var newOption = document.createElement('option');
+                    newOption.value = pair[0];
+                    newOption.innerHTML = pair[1];
+                    s2.options.add(newOption);
+                }
             }
         }
             
