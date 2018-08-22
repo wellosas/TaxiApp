@@ -203,6 +203,102 @@ define([
              }else{
                return;
              }
+        },
+        drawCChannel: function() {
+            d3.selectAll('use').transition().duration(100).delay(50).remove();
+
+            const svg = d3.select('.beam').attr('width', 300).attr('height', 150).style('display', 'block'),
+            margin = {top: 30, right: 50, bottom: 10, left: 50},
+            width = parseFloat(svg.attr('width')) - margin.left - margin.right,
+            height = parseFloat(svg.attr('height')) - margin.top - margin.bottom,
+            g = svg.append('g').attr('id', 'grpRoot')
+                .attr('transform', 'translate('+margin.left+','+margin.top+')'),                
+            x = d3.scaleLinear().range([0, width]),
+            y = d3.scaleLinear().range([height, 0]),
+            xAxis = d3.axisBottom(x),
+            yAxis = d3.axisLeft(y),
+            line = d3.line()
+                .x( (d) => { return x(d.x); })
+                .y( (d) => { return y(d.y); });
+
+            var data = [
+                {
+                    x: 0, 
+                    y: 0
+                },
+                {
+                    x: 43.00, 
+                    y: 0
+                },
+                {
+                    x: 43.00, 
+                    y: 7.50
+                },
+                {
+                    x: 8.20,
+                    y: 7.5
+                },
+                {
+                    x: 8.20,
+                    y: 94.50
+                },
+                {
+                    x: 43.00,
+                    y: 94.50
+                },
+                {
+                    x: 43.00,
+                    y: 102.00
+                },
+                {
+                    x: 0,
+                    y: 102.00
+                },
+                {
+                    x: 0,
+                    y: 0
+                }
+            ];
+            
+            data.forEach( (d) => {
+                d.x = +d.x;
+                d.y = +d.y;
+            });
+
+           // x.domain([d3.min(data, (d) => { return d.x * 5; }), d3.max(data, (d) => { return d.x * 5; })]);
+            //y.domain([d3.min(data, (d) => { return d.y * 5; }), d3.max(data, (d) => { return d.y * 5; })]);
+            x.domain([0, width]);
+            y.domain([0, height]);
+
+            /*g.append('g').attr('class', 'axis axis--x')
+                .attr('transform', 'translate(0,'+(height - margin.top - margin.bottom)+')')
+                .style('font-size', '8px')
+                .call(xAxis);*/
+
+            /*g.append('g').attr('class', 'axis axis--y')
+                .attr('transform', 'translate(0'+(-margin.top)+')')
+                .call(yAxis);*/
+
+            g.append('g').attr('class', 'cChannel')
+                //.attr('transform', 'translate('+width*0.5+','+(height*0.125)+')')
+                .append('path')
+                .datum(data)
+                .attr('class', 'line')
+                .attr('d', line)
+                .style('fill', "#ccc").style('stroke', '#000')
+                .style('shape-rendering', 'optimizeSpeed');
+
+            g.append('g').attr('class', 'dots')
+                .selectAll('dots')
+                .data(data).enter().append('circle')
+                .attr('r', 1.5)
+                .attr('cx', (d) => { return x(d.x); })
+                .attr('cy', (d) => { return y(d.y); })
+                .style('fill', 'red');
+
+                console.dirxml('svg', svg);
+                    
         }
+        
     }    
 });
