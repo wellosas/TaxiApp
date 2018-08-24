@@ -4,9 +4,11 @@ define([
     'use strict';
     return {
         initIbeam: function() {
+            d3.select('.cChannel').transition().duration(100).delay(50).remove();
+
             let sideMenu = document.querySelector('.sideMenu');
             let svg = d3.select('.beam')
-                    .attr('width', () => { return 300; })
+                    .attr('width', () => { return 340; })
                     .attr('height', () => { return 125; })
                     .style('display', 'block');
 
@@ -205,9 +207,9 @@ define([
              }
         },
         drawCChannel: function() {
-            d3.selectAll('use').transition().duration(100).delay(50).remove();
+            d3.select('.ibeam').transition().duration(100).delay(50).remove();
 
-            const svg = d3.select('.beam').attr('width', 300).attr('height', 150).style('display', 'block'),
+            const svg = d3.select('.beam').attr('width', 335).attr('height', 150).style('display', 'block'),
             margin = {top: 30, right: 50, bottom: 10, left: 50},
             width = parseFloat(svg.attr('width')) - margin.left - margin.right,
             height = parseFloat(svg.attr('height')) - margin.top - margin.bottom,
@@ -220,6 +222,15 @@ define([
             line = d3.line()
                 .x( (d) => { return x(d.x); })
                 .y( (d) => { return y(d.y); });
+
+            // Title            
+            g.append('text')
+                .attr('id', 'title')
+                .attr('x', () => { return width * 0.5; })
+                .attr('y', () => { return -(margin.top) * 0.5; })
+                .style('text-anchor', 'middle').style('font-size', '10px')
+                .text('C-Channels');
+           
 
             var data = [
                 {
@@ -236,11 +247,11 @@ define([
                 },
                 {
                     x: 8.20,
-                    y: 7.5
+                    y: 15.00
                 },
                 {
                     x: 8.20,
-                    y: 94.50
+                    y: 87.00
                 },
                 {
                     x: 43.00,
@@ -265,13 +276,13 @@ define([
                 d.y = +d.y;
             });
 
-           // x.domain([d3.min(data, (d) => { return d.x * 5; }), d3.max(data, (d) => { return d.x * 5; })]);
-            //y.domain([d3.min(data, (d) => { return d.y * 5; }), d3.max(data, (d) => { return d.y * 5; })]);
+            //x.domain([d3.min(data, (d) => { return (d.x); }), d3.max(data, (d) => { return d.x; })]);
+            //y.domain([d3.min(data, (d) => { return (d.y); }), d3.max(data, (d) => { return d.y; })]);
             x.domain([0, width]);
             y.domain([0, height]);
 
             /*g.append('g').attr('class', 'axis axis--x')
-                .attr('transform', 'translate(0,'+(height - margin.top - margin.bottom)+')')
+                .attr('transform', 'translate(0,'+height+')')
                 .style('font-size', '8px')
                 .call(xAxis);*/
 
@@ -298,7 +309,110 @@ define([
 
                 console.dirxml('svg', svg);
                     
-        }
-        
+        },
+        drawHSS: function(){
+            d3.select('.cChannel').transition().duration(100).delay(50).remove();
+            d3.select('.dots').transition().duration(100).delay(50).remove();
+            d3.select('#title').transition().duration(100).delay(50).text('HSS Beam');
+
+            var outerWidth = 51.00,
+                outerHeight = 102.00,
+                thickness = 3.18,
+                innerWidth = outerWidth - thickness,
+                innerHeight = outerHeight - thickness;
+
+            var data = [
+                {
+                    x : 0,
+                    y : 0                    
+                },
+                {
+                    x : outerWidth,
+                    y : 0
+                },
+                {
+                    x : outerWidth,
+                    y : outerHeight
+                },
+                {
+                    x : 0,
+                    y : outerHeight
+                },
+                {
+                    x : 0,
+                    y : 0
+                },
+                {
+                    x : thickness,
+                    y : thickness
+                },
+                {
+                    x : innerWidth,
+                    y : thickness
+                },
+                {
+                    x : innerWidth,
+                    y : innerHeight
+                },
+                {
+                    x : thickness,
+                    y : innerHeight
+                },
+                {
+                    x : thickness,
+                    y : thickness
+                }
+            ];
+
+            if( !document.querySelector('#grpRoot') ){
+                // Select svg dom element and change its properties
+                const svg = d3.select('.beam').attr('width', () => { return 335; })
+                .attr('height', () => { return 150; })
+                .attr('viewBox', '0 0 335 150').style('display', 'block'),
+                margin = {
+                    top: 30,
+                    bottom: 10,
+                    left: 50,
+                    right: 50
+                },
+                width = +svg.attr('width') - margin.left - margin.right,
+                height = +svg.attr('height') - margin.top - margin.bottom,
+                g = svg.append('g').attr('id', 'grpRoot')
+                    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
+                x = d3.scaleLinear().range([0, width]),
+                y = d3.scaleLinear().range([height, 0]),
+                xAxis = d3.axisBottom(x),
+                yAxis = d3.axisLeft(y),
+                line = d3.line()
+                    .x( (d) => { return x(d.x); })
+                    .y( (d) => { return y(d.y); });
+
+                // Title
+                g.append('text')
+                .attr('id', 'title')
+                .attr('x', () => { return width * 0.5; })
+                .attr('y', () => { return -(margin.top) * 0.5; })
+                .style('text-anchor', 'middle').style('font-size', '10px')
+                .text('HSS Beam');
+
+                data.forEach( (d) => {
+                    d.x = +d.x;
+                    d.y = +d.y;
+                    console.log('data => ',d.x, d.y);
+                });
+
+                x.domain([0, width]);
+                y.domain([0, height]);
+
+                g.append('g').attr('class', 'hss')
+                    .append('path')
+                    .datum(data)
+                    .attr('class', 'line')
+                    .attr('d', line)
+                    .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
+                    .style('fill-rule', 'evenodd').style('stroke', '#000');
+            }
+
+        }      
     }    
 });

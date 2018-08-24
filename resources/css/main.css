@@ -182,7 +182,8 @@ h1.header {
 
 svg{
     background: rgba(255, 255, 250, 0.25);
-    border: #000 solid 0.5px;
+    border: #ccc solid 0.25px;
+    border-radius: 5px;
     shape-rendering: crispEdges;/* geometricPrecision, optimizeSpeed;*/
 }
 /*

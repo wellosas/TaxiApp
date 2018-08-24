@@ -1,7 +1,8 @@
 define([
-    'beamProfile'
+    'beamProfile',
+    'fileLoader'
     ], 
-    function(beamProfile) {
+    function(beamProfile, fileLoader) {
     return {
         sel: function() {
             
@@ -33,7 +34,7 @@ define([
         onChangeBeamShapeMetric: function(s1 , s2) {
             s1 = document.querySelector('#beam_shape');
             s2 = document.querySelector('#beam_designation');
-            console.dirxml('on change event => ', s1, s2);
+            let selIndex = s1.selectedIndex;
 
             s2.innerHTML = "";
             if (s1.value == ""){
@@ -60,6 +61,18 @@ define([
                 }else{
                     beamProfile.drawCChannel();
                 }
+            }else if( s1.selectedIndex == 3 ){
+                beamProfile.drawHSS();
+                fileLoader.loadFile('./resources/doc/beam.json').then((response) => {
+                   return JSON.parse(response);
+                })
+                .then((response) => {
+                    return console.log('Yeh => ', response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+                console.log('lenght prop => ', s1.options[selIndex].text);
             }
         }
             
