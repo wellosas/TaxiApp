@@ -39,8 +39,8 @@ define([
             s2.innerHTML = "";
             if (s1.value == ""){
                 return;
-            }else if (s1.value == "w") {
-                beamProfile.initIbeam();
+            }else if (s1.options[selIndex].text == "W") {
+                beamProfile.drawIbeamMetric();
                 var optionListArray = [
                     "|", 
                     "w920x967|W920x967",
@@ -62,12 +62,12 @@ define([
                     beamProfile.drawCChannel();
                 }
             }else if( s1.selectedIndex == 3 ){
-                beamProfile.drawHSS();
+                beamProfile.drawHssMetric();
                 fileLoader.loadFile('./resources/doc/beam.json').then((response) => {
                    return JSON.parse(response);
                 })
                 .then((response) => {
-                    return console.log('Yeh => ', response);
+                    return console.log('Yeh => ', response.ibeamMetric[0]);
                 })
                 .catch((error) => {
                     console.log(error);
