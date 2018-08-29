@@ -3,9 +3,17 @@ requirejs.config({
     paths: 'd3/d3'
 });
 
-requirejs(['lib/d3/d3', 'beamProfile' , 'report' ,'graph', 'selectOptionList'], function(d3, beamProfile, report ,graph, selectOptionList) {
+requirejs([
+    'lib/d3/d3', 
+    'beamProfile', 
+    'report',
+    'graph',
+    'selectOptionList',
+    'beamconfig'
+], function(d3, beamProfile, report ,graph, selectOptionList, beamconfig) {
     report.SVGBeamReport();
     graph.SVGGraph();
     selectOptionList.sel();
     selectOptionList.selectOptionBeamShapeMetric();
+    beamconfig.initBeamWindow();
 });

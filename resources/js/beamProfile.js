@@ -3,42 +3,156 @@ define([
 ], function(d3) {
     'use strict';
     return {
-        drawIbeamMetric: function() {      
-                const dotMarker = defs.append('marker')
-                    .attr('id', 'dot')
-                    .attr('viewBox', '0 0 10 10')
-                    .attr('refX', '5')
-                    .attr('refY', '5')
-                    .attr('markerWidth', 5)
-                    .attr('markerHeight', 5);
+        drawIbeamMetric: function() {
+            
+            const svg = d3.select('.beam').attr('width', 335).attr('height', 335)
+                .style('display', 'block'),
+            
+                margin = {
+                    top : 50,
+                    bottom : 50,
+                    left : 50,
+                    right : 50
+                },
 
-                dotMarker.append('circle')
-                    .attr('cx', 5)
-                    .attr('cy', 5)
-                    .attr('r', 5)
-                    .attr('fill', '#000');
+                width = +svg.attr('width') - margin.left - margin.right,
+                height = +svg.attr('height') - margin.top - margin.bottom,
+                x = d3.scaleLinear().range([0, width]),
+                y = d3.scaleLinear().range([height, 0]),
+                xAxis = d3.axisBottom(x),
+                yAxis = d3.axisLeft(y),
+                line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { return y(d.y); }),
 
-                const arrowMarker = defs.append('marker')
-                    .attr('id', 'arrow')
-                    .attr('viewBox', '0 0 10 10')
-                    .attr('refX', 10)
-                    .attr('refY', 5)
-                    .attr('markerWidth', 5)
-                    .attr('markerHeight', 5)
-                    .attr('orient', 'auto-start-reverse');
+                topFlangeWidth = 446.00,
+                flangeThickness = 89.90,
+                web = 50.00,
+                distance = 1028.00;
 
-                arrowMarker.append('path')
-                    .attr('d', 'M 0 0 L 10 5 L 0 10 z')
-                    .attr('fill', '#000');
-               
+                var data = [
+                    {
+                        x : 0,
+                        y : 0
+                    },
+                    {
+                        x : topFlangeWidth,
+                        y : 0
+                    },
+                    {
+                        x : topFlangeWidth,
+                        y : flangeThickness
+                    },
+                    {
+                        x : (topFlangeWidth * 0.5) + (web * 0.5),
+                        y : flangeThickness
+                    },
+                    {
+                        x : (topFlangeWidth * 0.5) + (web * 0.5),
+                        y : distance - flangeThickness
+                    },
+                    {
+                        x : topFlangeWidth,
+                        y : distance - flangeThickness
+                    },
+                    {
+                        x : topFlangeWidth,
+                        y : distance
+                    },
+                    {
+                        x : 0,
+                        y : distance
+                    },
+                    {
+                        x : 0,
+                        y : distance - flangeThickness
+                    },
+                    {
+                        x : topFlangeWidth * 0.5 - web * 0.5,
+                        y : distance - flangeThickness
+                    },
+                    {
+                        x : topFlangeWidth * 0.5 - web * 0.5,
+                        y : flangeThickness
+                    },
+                    {
+                        x : 0,
+                        y : flangeThickness
+                    },
+                    {
+                        x : 0,
+                        y : 0
+                    }
+                ];
+
+                data.forEach( (d) => {
+                    d.x = +d.x;
+                    d.y = +d.y;
+                    console.log(d.x, d.y);
+                });
+                x.domain(d3.extent(data, (d) => { return d.x; }));
+                y.domain(d3.extent(data, (d) => { return d.y; }));
+
+                if( document.querySelectorAll('.beam #grpRoot').length == 0 ){
+                    const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+                    // Append title
+                    g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(margin.top * 0.5); })
+                        .attr('class', 'title').attr('id', 'title').style('text-anchor', 'middle').style('font-size', '10px')
+                        .text("I Beam Metric");
+
+                     // Draw Beam
+                    g.append('path')
+                        .datum(data)
+                        .attr('d', line)
+                        .attr('class', 'line')
+                        .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
+                        .style('fill-rule', 'evenodd').style('stroke', '#000');
+
+                    g.append('g').attr('class', 'axis x-axis').attr('transform', 'translate(0,'+ height + ')')
+                        .style('font-size', '8px')
+                        .call(xAxis.ticks(4));
+
+                    g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
+                        .call(yAxis.ticks(4));
+                }else{
+                    // Clear Screen
+                    d3.select('.line').transition().duration(100).delay(25).remove();                  
+
+                    // Update Title
+                    d3.select('.title').transition().duration(100).delay(25).text('I Beam Design Properties');
+                    let g = d3.select('#grpRoot');
+
+                    x.domain(d3.extent(data, (d) => { return d.x; }));
+                    y.domain(d3.extent(data, (d) => { return d.y; }));
+
+                    g.append('g').attr('id', 'line').attr('class', 'line')
+                        .append('path')
+                        .datum(data)
+                        .attr('d', line)
+                        .attr('class', 'line')
+                        .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
+                        .style('fill-rule', 'evenodd').style('stroke', '#000');
+
+                    //Clear Reappend the x and y axis
+                    //d3.selectAll('.axis').remove();
+                    /*var gx = g.append('g').attr('class', 'x-axis').attr('transform', 'translate(0,'+ height + ')')
+                        .style('font-size', '8px')
+                        .call(xAxis);
+
+                    var gy = g.append('g').attr('class', 'y-axis').style('font-size', '8px')
+                        .call(yAxis); */
+
+                    let gx = d3.select('.x-axis').call(xAxis.ticks(4));
+                    let gy = d3.select('.y-axis').call(yAxis.ticks(4));
+
+                }
         },
-        drawCChannel: function() {
-            const svg = d3.select('.beam').attr('width', 340).attr('height', 125)
+        drawCChannelMetric: function() {
+            const svg = d3.select('.beam').attr('width', 335).attr('height', 335)
             .style('display', 'block'),
             margin = {
-                top : 20,
-                bottom : 20,
-                left : 10,
+                top : 50,
+                bottom : 50,
+                left : 50,
                 right : 50
             },
             width = +svg.attr('width') - margin.left - margin.right,
@@ -93,8 +207,8 @@ define([
                 d.y = +d.y;
             });
 
-            x.domain([width, 0]);
-            y.domain([height, 0]);
+            x.domain(d3.extent(data, (d) => { return d.x; }));
+            y.domain(d3.extent(data, (d) => { return d.y; }));
 
             if ( document.querySelectorAll('.beam #grpRoot').length == 0  ){           
                 const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
@@ -110,16 +224,24 @@ define([
                  .attr('d', line)
                  .attr('class', 'line')
                  .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
-                 .style('fill-rule', 'evenodd').style('stroke', '#000');               
+                 .style('fill-rule', 'evenodd').style('stroke', '#000');
+                 
+                    // append x and y axis
+                    var gx = g.append('g').attr('class', 'axis x-axis').style('font-size', '8px')
+                            .call(xAxis.ticks(4));
+                    var gy = g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
+                            .call(yAxis.ticks(4));
             }else{
-                 // clear all unwanted dom elements
-                 d3.select('.line').transition().duration(100).delay(50).remove();
-                
+                 
+                d3.select('.line').remove();
                  // clear title and update
                  d3.select('.title').text("");
                  d3.select('.title').text("C-Channel Beam Metric");
 
                  var g = d3.select('#grpRoot');
+
+                 x.domain(d3.extent(data, (d) => { return d.x; }));
+                 y.domain(d3.extent(data, (d) => { return d.y; }));
  
                   // Draw Beam
                   g.append('path')
@@ -128,16 +250,28 @@ define([
                   .attr('class', 'line')
                   .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
                   .style('fill-rule', 'evenodd').style('stroke', '#000');
+
+                  //clear x and y axis, then reappend
+                  //d3.selectAll('.axis').remove();
+                  // append x and y axis
+                    /*var gx = g.append('g').attr('class', 'x-axis').style('font-size', '8px').attr('transform', 'translate(0,'+height+')')
+                            .call(xAxis);
+                    var gy = g.append('g').attr('class', 'y-axis').style('font-size', '8px')
+                            .call(yAxis);*/
+
+                    let gx = d3.select('.x-axis').call(xAxis.ticks(4));
+                    let gy = d3.select('.y-axis').call(yAxis.ticks(4));
+                  
             }
 
                     
         },
         drawHssMetric: function() {            
-            const svg = d3.select('.beam').attr('width', 340).attr('height', 125)
+            const svg = d3.select('.beam').attr('width', 335).attr('height', 335)
             .style('display', 'block'),
             margin = {
-                top : 20,
-                bottom : 20,
+                top : 50,
+                bottom : 50,
                 left : 50,
                 right : 50
             },
@@ -151,9 +285,7 @@ define([
 
             var outerWidth = 51.00,
                 outerHeight = 102.00,
-                thickness = 3.18,
-                innerWidth = outerWidth - thickness,
-                innerHeight = outerHeight - thickness;
+                thickness = 3.18;
 
             var data = [
                 {
@@ -181,16 +313,16 @@ define([
                     y : thickness
                 },
                 {
-                    x : innerWidth,
+                    x : outerWidth - thickness,
                     y : thickness
                 },
                 {
-                    x : innerWidth,
-                    y : innerHeight
+                    x : outerWidth - thickness,
+                    y : outerHeight - thickness
                 },
                 {
                     x : thickness,
-                    y : innerHeight
+                    y : outerHeight - thickness
                 },
                 {
                     x : thickness,
@@ -200,11 +332,11 @@ define([
 
             data.forEach( (d) => {
                 d.x = +d.x;
-                d.y = +d.y;
+                d.y = +d.y;                             
             });
 
-            x.domain([0, width]);
-            y.domain([height, 0]);
+            x.domain(d3.extent(data, (d) => { return d.x; }));
+            y.domain(d3.extent(data, (d) => { return d.y; }));
 
             //Check if root group hans been created
             if ( document.querySelectorAll('.beam #grpRoot').length == 0 ){
@@ -222,6 +354,12 @@ define([
                 .attr('class', 'line')
                 .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
                 .style('fill-rule', 'evenodd').style('stroke', '#000');
+
+                 // append x and y axis
+                 var gx = g.append('g').attr('class', 'axis x-axis').style('font-size', '8px').attr('transform', 'translate(0,'+height+')')
+                    .call(xAxis);
+                var gy = g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
+                    .call(yAxis.ticks(4));
             }else {
                  // clear all unwanted dom elements
                 d3.select('.line').transition().duration(100).delay(50).remove();
@@ -231,13 +369,20 @@ define([
                 d3.select('.title').text("HSS Beam Metric");
 
                 var g = d3.select('#grpRoot');
+
+                x.domain(d3.extent(data, (d) => { return d.x; }));
+                y.domain(d3.extent(data, (d) => { return d.y; }));
                  // Draw Beam
-                 g.append('path')
+                 g.append('g').attr('id', 'line')
+                 .append('path')
                  .datum(data)
                  .attr('d', line)
                  .attr('class', 'line')
                  .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
                  .style('fill-rule', 'evenodd').style('stroke', '#000');
+                
+                let gx = d3.select('.x-axis').call(xAxis);
+                let gy = d3.select('.y-axis').call(yAxis.ticks(4));
             }
         }    
     }    

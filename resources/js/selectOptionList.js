@@ -59,7 +59,7 @@ define([
                 if(!use){
                     return;
                 }else{
-                    beamProfile.drawCChannel();
+                    beamProfile.drawCChannelMetric();
                 }
             }else if( s1.selectedIndex == 3 ){
                 beamProfile.drawHssMetric();
@@ -68,6 +68,9 @@ define([
                 })
                 .then((response) => {
                     return console.log('Yeh => ', response.ibeamMetric[0]);
+                })
+                .then((response) => {
+                    return response.filter((d) => { return console.log(d.designation); })
                 })
                 .catch((error) => {
                     console.log(error);
