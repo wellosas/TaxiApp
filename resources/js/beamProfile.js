@@ -107,11 +107,12 @@ define([
                         .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
                         .style('fill-rule', 'evenodd').style('stroke', '#000');
 
-                    g.append('g').attr('class', 'axis x-axis').attr('transform', 'translate(0,'+ height + ')')
+                    g.append('g').attr('class', 'axis x-axis').attr('transform', 'translate(0,'+ (height + 10) + ')')
                         .style('font-size', '8px')
                         .call(xAxis.ticks(4));
 
                     g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
+                        .attr('transform', 'translate(' + (-margin.left * 0.25) + ',' + 0 + ')')
                         .call(yAxis.ticks(4));
                 }else{
                     // Clear Screen
@@ -227,7 +228,7 @@ define([
                  .style('fill-rule', 'evenodd').style('stroke', '#000');
                  
                     // append x and y axis
-                    var gx = g.append('g').attr('class', 'axis x-axis').style('font-size', '8px')
+                    var gx = g.append('g').attr('class', 'axis x-axis').style('font-size', '8px').attr('transform', 'translate(0,' + height + ')')
                             .call(xAxis.ticks(4));
                     var gy = g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
                             .call(yAxis.ticks(4));
@@ -357,7 +358,7 @@ define([
 
                  // append x and y axis
                  var gx = g.append('g').attr('class', 'axis x-axis').style('font-size', '8px').attr('transform', 'translate(0,'+height+')')
-                    .call(xAxis);
+                    .call(xAxis.ticks(4));
                 var gy = g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
                     .call(yAxis.ticks(4));
             }else {

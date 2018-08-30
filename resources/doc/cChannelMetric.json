@@ -1,0 +1,40 @@
+[
+    {
+        "designation": "Please Select"
+    },
+    {
+        "flangeWidth" : 43,
+        "web" : 8.2,
+        "thickness" : 7.5,
+        "distance" : 102,
+        "designation" : "C100x11"
+    },
+    {
+        "flangeWidth" : 40,
+        "web" : 3.2,
+        "thickness" : 7.5,
+        "distance" : 102,
+        "designation" : "C100x7"
+    },
+    {
+        "flangeWidth" : 40,
+        "web" : 4.7,
+        "thickness" : 7.5,
+        "distance" : 102,
+        "designation" : "C100x8"
+    },
+    {
+        "flangeWidth" : 42,
+        "web" : 6.3,
+        "thickness" : 7.5,
+        "distance" : 102,
+        "designation" : "C100x9"
+    },
+    {
+        "flangeWidth" : 44,
+        "web" : 4.8,
+        "thickness" : 8.1,
+        "distance" : 127,
+        "designation" : "C100x10"
+    }
+]

@@ -1,0 +1,25 @@
+[
+    {
+        "designation": "Please Select"
+    },
+    {
+        "topFlangeWidth" : 446.00,
+        "web" : 50.00,
+        "topFlangeThickness" : 89.90,
+        "distance" : 1028.00,
+        "k1" : 55.00,
+        "k" : 121.00,
+        "shape": "W",
+        "designation" : "W920x967"
+    },
+    {
+        "topFlangeWidth" : 437.00,
+        "web" : 40.90,
+        "topFlangeThickness" : 73.90,
+        "distance" : 996.00,
+        "k1" : 50.00,
+        "k" : 105.00,
+        "shape": "W",
+        "designation" : "W920x784"
+    }
+]

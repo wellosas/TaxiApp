@@ -15,5 +15,6 @@ requirejs([
     graph.SVGGraph();
     selectOptionList.sel();
     selectOptionList.selectOptionBeamShapeMetric();
+    selectOptionList.selectOptionBeamDesignationMetric();
     beamconfig.initBeamWindow();
 });

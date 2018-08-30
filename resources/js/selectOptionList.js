@@ -1,8 +1,9 @@
 define([
     'beamProfile',
-    'fileLoader'
+    'fileLoader',
+    'lib/d3/d3'
     ], 
-    function(beamProfile, fileLoader) {
+    function(beamProfile, fileLoader, d3) {
     return {
         sel: function() {
             
@@ -16,7 +17,7 @@ define([
             s2.innerHTML = "";
 
             if(s1.value == "mm") {
-                var optionListArray = ["|","w|W", "c|C", "hss|HSS"];
+                var optionListArray = ["|","w|W", "c|C", "hss|HSS", "angle|Angle"];
             }
             for( let optionList in optionListArray){
                 var pair = optionListArray[optionList].split("|");
@@ -41,42 +42,107 @@ define([
                 return;
             }else if (s1.options[selIndex].text == "W") {
                 beamProfile.drawIbeamMetric();
-                var optionListArray = [
-                    "|", 
-                    "w920x967|W920x967",
-                    "w920x784|W920x784"
-                ];
-                for(let optionList in optionListArray){
-                    var pair = optionListArray[optionList].split("|");
-                    var newOption = document.createElement('option');
-                    newOption.value = pair[0];
-                    newOption.innerHTML = pair[1];
-                    s2.options.add(newOption);
-                }
+
+                fileLoader.ajax('./resources/doc/wBeamMetric.json')
+                    .then((e) => { 
+                        var wBeam = JSON.parse(e);
+                        for(var i in wBeam){
+                            var newOption = document.createElement('option')
+                            newOption.innerHTML = wBeam[i].designation;
+                            s2.options.add(newOption);
+                        }                       
+                     })
+                    .catch((err) => { return console.log(err); });
             }
-            else if (s1.selectedIndex == 2) {
-                let use = document.querySelectorAll('use');
-                if(!use){
-                    return;
-                }else{
+            else if (s1.options[selIndex].text == "C") {               
                     beamProfile.drawCChannelMetric();
-                }
-            }else if( s1.selectedIndex == 3 ){
+                    fileLoader.ajax('./resources/doc/cChannelMetric.json').then((o) => {
+                        var cChannel = JSON.parse(o);
+                        for(var c in cChannel){
+                            console.log(cChannel[c].designation);
+                            var newOption = document.createElement('option')
+                            newOption.innerHTML = cChannel[c].designation;
+                            s2.options.add(newOption);
+                        }
+                    }).catch((err) => { return console.log(err); });
+                
+            }else if( s1.options[selIndex].text == "HSS" ){
                 beamProfile.drawHssMetric();
-                fileLoader.loadFile('./resources/doc/beam.json').then((response) => {
-                   return JSON.parse(response);
-                })
-                .then((response) => {
-                    return console.log('Yeh => ', response.ibeamMetric[0]);
-                })
-                .then((response) => {
-                    return response.filter((d) => { return console.log(d.designation); })
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-                console.log('lenght prop => ', s1.options[selIndex].text);
+                fileLoader.loadJson('./resources/doc/beam.json');
             }
+        },
+        selectOptionBeamDesignationMetric: function(){
+            document.querySelector('#beam_designation').addEventListener('change', () => {
+                this.onChangeDesignationMetric();
+            }, false);
+
+        },
+        onChangeDesignationMetric: function(s1) {
+            var s1 = document.querySelector('#beam_designation');
+            let selIndex = s1.selectedIndex;
+            console.log('selectedindex => ', selIndex);            
+
+            let switchAction = s1.options[selIndex].text;
+            switch (switchAction) {
+                case  "W920x967" :
+                    fileLoader.ajax('./resources/doc/wBeamMetric.json')
+                    .then((e) => {
+                        let wBeamDataset = JSON.parse(e);                        
+
+                        var data = [
+                            {
+                                x : 0,
+                                y : 0
+                            },
+                            {
+                                x : wBeamDataset[1].topFlangeWidth,
+                                y : 0
+                            },
+                            {
+                                x : wBeamDataset[1].topFlangeWidth,
+                                y : wBeamDataset[1].topFlangeThickness,
+                            },
+                            {
+                                x : (wBeamDataset[1].topFlangeWidth * 0.5) + (wBeamDataset[1].web * 0.5),
+                                y : wBeamDataset[1].topFlangeThickness
+                            },
+                            {
+                                x : wBeamDataset[1].topFlangeWidth,
+                                y : wBeamDataset[1].distance - wBeamDataset[1].topFlangeThickness
+                            },
+                            {
+                                x : wBeamDataset[1].topFlangeWidth,
+                                y : wBeamDataset[1].distance
+                            },
+                            {
+                                x : 0,
+                                y : wBeamDataset[1].distance
+                            },
+                            {
+                                x : 0,
+                                y : wBeamDataset[1].distance - wBeamDataset[1].topFlangeThickness
+                            },
+                            {
+                                x : (wBeamDataset[1].topFlangeWidth * 0.5) - (wBeamDataset[1].web * 0.5),
+                                y : wBeamDataset[1].topFlangeThickness
+                            },
+                            {
+                                x : 0,
+                                y : wBeamDataset[1].topFlangeThickness
+                            },
+                            {
+                                x : 0,
+                                y : 0
+                            }
+                        ];
+                        data.forEach((v) => {
+                            v.x = +v.x;
+                            v.y = +v.y;                            
+                        });
+                    })
+                    .catch((err) => { return console.log(err)});
+                break;
+            }            
         }
             
     }
