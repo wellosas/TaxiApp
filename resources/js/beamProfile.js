@@ -1,18 +1,19 @@
 define([
-    'lib/d3/d3'
-], function(d3) {
+    'lib/d3/d3',
+    'graphToolbox'
+], function(d3, graphToolbox) {
     'use strict';
     return {
         drawIbeamMetric: function() {
             
-            const svg = d3.select('.beam').attr('width', 335).attr('height', 335)
+            const svg = d3.select('.beam').attr('width', 125).attr('height', 125)
                 .style('display', 'block'),
             
                 margin = {
-                    top : 50,
-                    bottom : 50,
+                    top : 25,
+                    bottom : 25,
                     left : 50,
-                    right : 50
+                    right : 25
                 },
 
                 width = +svg.attr('width') - margin.left - margin.right,
@@ -86,7 +87,6 @@ define([
                 data.forEach( (d) => {
                     d.x = +d.x;
                     d.y = +d.y;
-                    console.log(d.x, d.y);
                 });
                 x.domain(d3.extent(data, (d) => { return d.x; }));
                 y.domain(d3.extent(data, (d) => { return d.y; }));
@@ -100,7 +100,7 @@ define([
                         .text("I Beam Metric");
 
                      // Draw Beam
-                    g.append('path')
+                    g.append('g').attr('class', 'grpPath').append('path')
                         .datum(data)
                         .attr('d', line)
                         .attr('class', 'line')

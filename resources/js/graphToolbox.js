@@ -3,11 +3,19 @@ define([
 ], function(d3) {
     'use strict';
     return {
-        margin: {
+        margin : {
             top : 25,
             bottom : 25,
             left : 25,
             right : 25
+        },
+        SVGProp : {
+            width : 125,
+            height : 125,
+            backgroundColor: "#F4F4F4",
+            id : "beamProfile",
+            class : "beamProfile",
+            displayType : "block" | "none"          
         }
     }
     

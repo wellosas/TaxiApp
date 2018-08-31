@@ -1,9 +1,10 @@
 define([
     'beamProfile',
     'fileLoader',
-    'lib/d3/d3'
+    'lib/d3/d3',
+    'graphToolbox'
     ], 
-    function(beamProfile, fileLoader, d3) {
+    function(beamProfile, fileLoader, d3, graphToolbox) {
     return {
         sel: function() {
             
@@ -79,15 +80,28 @@ define([
         },
         onChangeDesignationMetric: function(s1) {
             var s1 = document.querySelector('#beam_designation');
-            let selIndex = s1.selectedIndex;
-            console.log('selectedindex => ', selIndex);            
+            let selIndex = s1.selectedIndex;           
 
             let switchAction = s1.options[selIndex].text;
             switch (switchAction) {
                 case  "W920x967" :
                     fileLoader.ajax('./resources/doc/wBeamMetric.json')
                     .then((e) => {
-                        let wBeamDataset = JSON.parse(e);                        
+
+                        let svg = d3.select('.beam');
+                            svg.style('background-color', () => {
+                                return graphToolbox.SVGProp.backgroundColor;
+                            });
+
+                        let width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right;
+                        let height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom;
+                        let x = d3.scaleLinear().range([0, width]);
+                        let y =  d3.scaleLinear().range([height, 0]);
+                        let xAxis = d3.axisBottom(x);
+                        let yAxis = d3.axisLeft(y);
+                        let line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { y(d.y); });                    
+
+                        let wBeamDataset = JSON.parse(e);                      
 
                         var data = [
                             {
@@ -135,10 +149,18 @@ define([
                                 y : 0
                             }
                         ];
-                        data.forEach((v) => {
-                            v.x = +v.x;
-                            v.y = +v.y;                            
+                        data.forEach((d) => {
+                            d.x = +d.x;
+                            d.y = +d.y;                            
                         });
+
+                        x.domain(d3.extent(data, (d) => { return d.x; }));
+                        y.domain(d3.extent(data, (d) => { return d.y; }));
+
+                        // Update Profile
+                        d3.select('grpPath').attr('d', line);
+                        // Update Title
+                        d3.select('.title').text(wBeamDataset[1].designation);
                     })
                     .catch((err) => { return console.log(err)});
                 break;
