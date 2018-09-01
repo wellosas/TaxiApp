@@ -10,12 +10,12 @@ define([
             right : 25
         },
         SVGProp : {
-            width : 125,
-            height : 125,
+            width : 225,
+            height : 225,
             backgroundColor: "#F4F4F4",
             id : "beamProfile",
             class : "beamProfile",
-            displayType : "block" | "none"          
+            displayType : "block" | "none"        
         }
     }
     

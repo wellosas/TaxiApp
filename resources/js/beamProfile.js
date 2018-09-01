@@ -6,7 +6,11 @@ define([
     return {
         drawIbeamMetric: function() {
             
-            const svg = d3.select('.beam').attr('width', 125).attr('height', 125)
+            const svg = d3.select('.beam').attr('width', () => {
+                return graphToolbox.SVGProp.width;
+            }).attr('height', () => {
+                return graphToolbox.SVGProp.height;
+            })
                 .style('display', 'block'),
             
                 margin = {

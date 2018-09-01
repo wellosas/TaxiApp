@@ -43,7 +43,6 @@ define([
                 return;
             }else if (s1.options[selIndex].text == "W") {
                 beamProfile.drawIbeamMetric();
-
                 fileLoader.ajax('./resources/doc/wBeamMetric.json')
                     .then((e) => { 
                         var wBeam = JSON.parse(e);
@@ -83,89 +82,125 @@ define([
             let selIndex = s1.selectedIndex;           
 
             let switchAction = s1.options[selIndex].text;
-            switch (switchAction) {
-                case  "W920x967" :
-                    fileLoader.ajax('./resources/doc/wBeamMetric.json')
-                    .then((e) => {
 
-                        let svg = d3.select('.beam');
-                            svg.style('background-color', () => {
-                                return graphToolbox.SVGProp.backgroundColor;
+            let svg = d3.select('.beam');
+            svg.style('background-color', () => {
+                return graphToolbox.SVGProp.backgroundColor;
+            });
+
+            let width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right;
+            let height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom;
+            let x = d3.scaleLinear().range([0, width]);
+            let y =  d3.scaleLinear().range([height, 0]);
+            let xAxis = d3.axisBottom(x);
+            let yAxis = d3.axisLeft(y);
+            let line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { y(d.y); });
+
+            fileLoader.ajax('./resources/doc/wBeamMetric.json')
+                .then( (e) => {
+                    let wBeamDataset = JSON.parse(e);
+                    switch (switchAction) {
+                        case "W920x967" :
+                            var data = [
+                                {
+                                    x : 0,
+                                    y : 0
+                                },
+                                {
+                                    x : wBeamDataset[1].topFlangeWidth,
+                                    y : 0
+                                },
+                                {
+                                    x : wBeamDataset[1].topFlangeWidth,
+                                    y : wBeamDataset[1].topFlangeThickness,
+                                },
+                                {
+                                    x : (wBeamDataset[1].topFlangeWidth * 0.5) + (wBeamDataset[1].web * 0.5),
+                                    y : wBeamDataset[1].topFlangeThickness
+                                },
+                                {
+                                    x : wBeamDataset[1].topFlangeWidth,
+                                    y : wBeamDataset[1].distance - wBeamDataset[1].topFlangeThickness
+                                },
+                                {
+                                    x : wBeamDataset[1].topFlangeWidth,
+                                    y : wBeamDataset[1].distance
+                                },
+                                {
+                                    x : 0,
+                                    y : wBeamDataset[1].distance
+                                },
+                                {
+                                    x : 0,
+                                    y : wBeamDataset[1].distance - wBeamDataset[1].topFlangeThickness
+                                },
+                                {
+                                    x : (wBeamDataset[1].topFlangeWidth * 0.5) - (wBeamDataset[1].web * 0.5),
+                                    y : wBeamDataset[1].topFlangeThickness
+                                },
+                                {
+                                    x : 0,
+                                    y : wBeamDataset[1].topFlangeThickness
+                                },
+                                {
+                                    x : 0,
+                                    y : 0
+                                }
+                            ];
+                            data.forEach((d) => {
+                                d.x = +d.x;
+                                d.y = +d.y;                            
                             });
 
-                        let width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right;
-                        let height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom;
-                        let x = d3.scaleLinear().range([0, width]);
-                        let y =  d3.scaleLinear().range([height, 0]);
-                        let xAxis = d3.axisBottom(x);
-                        let yAxis = d3.axisLeft(y);
-                        let line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { y(d.y); });                    
+                            x.domain(d3.extent(data, (d) => { return d.x; }));
+                            y.domain(d3.extent(data, (d) => { return d.y; }));
 
-                        let wBeamDataset = JSON.parse(e);                      
+                            // Update Profile
+                            d3.select('grpPath').attr('d', line);
+                            // Update Title
+                            d3.select('.title').text(wBeamDataset[1].designation);
+                            // Remove x and y axis
+                            d3.selectAll('.axis').remove();
 
-                        var data = [
-                            {
-                                x : 0,
-                                y : 0
-                            },
-                            {
-                                x : wBeamDataset[1].topFlangeWidth,
-                                y : 0
-                            },
-                            {
-                                x : wBeamDataset[1].topFlangeWidth,
-                                y : wBeamDataset[1].topFlangeThickness,
-                            },
-                            {
-                                x : (wBeamDataset[1].topFlangeWidth * 0.5) + (wBeamDataset[1].web * 0.5),
-                                y : wBeamDataset[1].topFlangeThickness
-                            },
-                            {
-                                x : wBeamDataset[1].topFlangeWidth,
-                                y : wBeamDataset[1].distance - wBeamDataset[1].topFlangeThickness
-                            },
-                            {
-                                x : wBeamDataset[1].topFlangeWidth,
-                                y : wBeamDataset[1].distance
-                            },
-                            {
-                                x : 0,
-                                y : wBeamDataset[1].distance
-                            },
-                            {
-                                x : 0,
-                                y : wBeamDataset[1].distance - wBeamDataset[1].topFlangeThickness
-                            },
-                            {
-                                x : (wBeamDataset[1].topFlangeWidth * 0.5) - (wBeamDataset[1].web * 0.5),
-                                y : wBeamDataset[1].topFlangeThickness
-                            },
-                            {
-                                x : 0,
-                                y : wBeamDataset[1].topFlangeThickness
-                            },
-                            {
-                                x : 0,
-                                y : 0
-                            }
-                        ];
-                        data.forEach((d) => {
-                            d.x = +d.x;
-                            d.y = +d.y;                            
-                        });
+                            // Create Dimension line and label
 
-                        x.domain(d3.extent(data, (d) => { return d.x; }));
-                        y.domain(d3.extent(data, (d) => { return d.y; }));
+                            // check if flangeDistanceDim is alrady present in the dom
 
-                        // Update Profile
-                        d3.select('grpPath').attr('d', line);
-                        // Update Title
-                        d3.select('.title').text(wBeamDataset[1].designation);
-                    })
-                    .catch((err) => { return console.log(err)});
-                break;
-            }            
-        }
+                            if(document.querySelectorAll('.flangeDistanceDim').length === 0){
+                                let flangeDistanceDim = d3.select('#grpRoot').append('g').attr('class', 'flangeDistanceDim');
+                                flangeDistanceDim.append('line').attr('class', 'flangeDimLine')
+                                .attr('x1', () => {
+                                    return x(-graphToolbox.margin.left * 0.5 - 50);
+                                })
+                                .attr('x2', () => {
+                                    return x(-graphToolbox.margin.left * 0.5 - 50);
+                                })
+                                .attr('y1', () => {
+                                    return y(wBeamDataset[1].distance);
+                                })
+                                .attr('y2', y(0))
+                                .style('stroke', "#000").style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
+
+                                d3.select('.flangeDistanceDim').append('text')
+                                    .attr('x', () => {
+                                        return x(-graphToolbox.margin.left * 0.5 - 50);
+                                    })
+                                    .attr('y', () => {
+                                        //y(-wBeamDataset[1].distance * 0.5); 
+                                        return y( -(graphToolbox.SVGProp.height / 2) );
+                                            
+                                    })
+                                    .attr('transform', 'rotate(90)').style('fill', '#000').style('text-anchor', "middle")
+                                    .text(wBeamDataset[1].distance + ' mm');
+    
+                            }else{ return}
+
+                        break;
+                    }
+                })
+                .catch((err) => { return console.log(err); });
             
-    }
+        }// end Switch Statement
+            
+    } // end main method
 });
