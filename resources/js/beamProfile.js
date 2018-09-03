@@ -19,9 +19,8 @@ define([
                     left : 50,
                     right : 25
                 },
-
-                width = +svg.attr('width') - margin.left - margin.right,
-                height = +svg.attr('height') - margin.top - margin.bottom,
+                width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right,
+                height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom,
                 x = d3.scaleLinear().range([0, width]),
                 y = d3.scaleLinear().range([height, 0]),
                 xAxis = d3.axisBottom(x),
@@ -96,7 +95,7 @@ define([
                 y.domain(d3.extent(data, (d) => { return d.y; }));
 
                 if( document.querySelectorAll('.beam #grpRoot').length == 0 ){
-                    const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+                    const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + graphToolbox.margin.left + ',' + graphToolbox.margin.top + ')');
 
                     // Append title
                     g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(margin.top * 0.5); })
@@ -111,13 +110,61 @@ define([
                         .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
                         .style('fill-rule', 'evenodd').style('stroke', '#000');
 
-                    g.append('g').attr('class', 'axis x-axis').attr('transform', 'translate(0,'+ (height + 10) + ')')
+                    /*g.append('g').attr('class', 'axis x-axis').attr('transform', 'translate(0,'+ (height + 10) + ')')
                         .style('font-size', '8px')
                         .call(xAxis.ticks(4));
 
-                    g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
+                   g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
                         .attr('transform', 'translate(' + (-margin.left * 0.25) + ',' + 0 + ')')
-                        .call(yAxis.ticks(4));
+                        .call(yAxis.ticks(4));*/
+
+                    // check if dimension line has been appended to the dom
+                    if ( document.querySelectorAll('.iBeamHeightDim').length == 0 ){
+                        let iBeamHeightDim = d3.select('#grpRoot').append('g').attr('class', 'iBeamHeightDim').attr('id', 'iBeamHeightDim');
+                        iBeamHeightDim.append('line').attr('class', 'iBeamHeightLine')
+                            .attr('x1', () => {
+                                return x(-graphToolbox.margin.left * 0.5 - 30);
+                            })
+                            .attr('x2', () => {
+                                return x(-graphToolbox.margin.left * 0.5 - 30);
+                            })
+                            .attr('y1', () => {
+                                return y( distance );
+                            })
+                            .attr('y2', y(0))
+                            .style('stroke', "#000").style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
+
+                        // Ibeam Height Dim label
+                        iBeamHeightDim.append('text')
+                            .attr('class', 'iBeamHeightLabel')
+                            .attr('x', () => {
+                                return x(-graphToolbox.margin.left * 0.5 - 20);
+                            })
+                            .attr('y', () => {
+                                //y(-wBeamDataset[1].distance * 0.5); 
+                                return y( ( distance / 2 ) );
+                                    
+                            })
+                            .attr('transform', 'rotate(90' + ',' + x(-graphToolbox.margin.left * 0.5 - 20) + ',' + y( ( distance / 2 ) ) + ')')
+                            .style('fill', '#000').style('text-anchor', "middle")
+                            .text('d = ' + distance + ' mm');
+
+                        // Ibeam Width 
+                        let iBeamWidthDim = d3.select('#grpRoot').append('g').attr('class', 'iBeamWidthDim').attr('id', 'iBeamWidthDim');
+                        iBeamWidthDim.append('line').attr('class', 'ibeamWidthLine')
+                            .attr('x1', () => {return x(0); })
+                            .attr('x2', () => {
+                                return x(topFlangeWidth);
+                            })
+                            .attr('y1', () => {
+                                return y( -height + graphToolbox.margin.bottom + graphToolbox.margin.top + 20);
+                            })
+                            .attr('y2', () => {
+                                return y( -height + graphToolbox.margin.bottom + graphToolbox.margin.top + 20);
+                            })
+                            .style('stroke', '#000').style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
+
+                    }
                 }else{
                     // Clear Screen
                     d3.select('.line').transition().duration(100).delay(25).remove();                  

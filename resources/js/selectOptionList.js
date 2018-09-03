@@ -187,11 +187,12 @@ define([
                                     })
                                     .attr('y', () => {
                                         //y(-wBeamDataset[1].distance * 0.5); 
-                                        return y( -(graphToolbox.SVGProp.height / 2) );
+                                        return y( ( wBeamDataset[1].distance / 2 ) );
                                             
                                     })
-                                    .attr('transform', 'rotate(90)').style('fill', '#000').style('text-anchor', "middle")
-                                    .text(wBeamDataset[1].distance + ' mm');
+                                    .attr('transform', 'rotate(90' + ',' + x(-graphToolbox.margin.left * 0.5 - 30) + ',' + y( ( wBeamDataset[1].distance / 2 ) ) + ')')
+                                    .style('fill', '#000').style('text-anchor', "middle")
+                                    .text('d = ' + wBeamDataset[1].distance + ' mm');
     
                             }else{ return}
 
