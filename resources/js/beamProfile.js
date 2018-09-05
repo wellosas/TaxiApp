@@ -99,7 +99,7 @@ define([
 
                     // Append title
                     g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(margin.top * 0.5); })
-                        .attr('class', 'title').attr('id', 'title').style('text-anchor', 'middle').style('font-size', '10px')
+                        .attr('class', 'title').attr('id', 'title').style('text-anchor', 'end').style('font-size', '10px')
                         .text("I Beam Metric");
 
                      // Draw Beam
@@ -164,6 +164,101 @@ define([
                             })
                             .style('stroke', '#000').style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
 
+                        // Ibeam width label
+                        iBeamWidthDim.append('text').attr('class', 'ibeamWidthLabel')
+                            .attr('x', () => {
+                                return x(topFlangeWidth * 0.5);
+                            })
+                            .attr('y', () => {
+                                return y(-height + graphToolbox.margin.bottom + graphToolbox.margin.top + 40)
+                            })
+                            .style('fill', "#000").style('text-anchor', 'middle')
+                            .text('b = ' + topFlangeWidth + ' mm');
+
+                        // Ibeam web dim
+                        let iBeamWebDim = d3.select('#grpRoot').append('g').attr('class', 'iBeamWebDim').attr('id', 'iBeamWebDim');
+                        iBeamWebDim.append('line').attr('class', 'iBeamWebLine')
+                            .attr('x1', () => {
+                                return x(topFlangeWidth * 0.5 - web * 0.5);
+                            })
+                            .attr('x2', () => {
+                                return x( topFlangeWidth * 0.25);
+                            })
+                            .attr('y1', () => {
+                                return y(distance * 0.65);
+                            })
+                            .attr('y2', () => {
+                                return y(distance * 0.65);
+                            })
+                            .style('stroke', '#000').style('marker-start', 'url(#arrow)');
+
+                        iBeamWebDim.append('line').attr('class', 'iBeamWebLine')
+                            .attr('x1', () => {
+                                return x(topFlangeWidth * 0.5 + web * 0.5);
+                            })
+                            .attr('x2', () => {
+                                return x(topFlangeWidth * 0.75);
+                            })
+                            .attr('y1', () => {
+                                return y(distance * 0.65);
+                            })
+                            .attr('y2', () => {
+                                return y(distance * 0.65);
+                            })
+                            .style('stroke', '#000').style('marker-start', 'url(#arrow)');
+
+                        iBeamWebDim.append('text').attr('class', 'iBeamWebLabel').attr('id', 'dim')
+                            .attr('x', () => {
+                                return x( (topFlangeWidth * 0.5 + web * 0.5 + 20) / 1 );
+                            })
+                            .attr('y', () => {
+                                return y( distance * 0.65  + 20);
+                            })
+                            .style('fill', '#000').style('text-anchor', 'start')
+                            .text('Web = ' + web + ' mm');
+
+                        // Flange Thickness
+                        var flangeThicknessDim = d3.select('#grpRoot').append('g').classed('flangeThicknessDim', true);
+                            flangeThicknessDim.append('path')
+                                .attr('class', 'flangeThicknessLine').attr('id', 'dim')
+                                .attr('d', () => {
+                                    return `
+                                    M ${x(topFlangeWidth * 0.85)}, ${y(distance)}
+                                        L ${x(topFlangeWidth * 0.85)}, ${y(flangeThickness + distance)}
+                                        ${x(topFlangeWidth)}, ${y(flangeThickness + distance)}                                       
+                                        `
+                                })
+                                .style('fill', 'none').style('stroke', '#000').style('stroke-width', 0.85)
+                                .style('marker-start', 'url(#arrow)');
+
+                        // Bottom arrow for Flange Thickness
+                        flangeThicknessDim.append('line').attr('id', 'dim').classed('flangeThicknessLineBottom', true)
+                                .attr('x1', () => {
+                                    return x(topFlangeWidth * 0.85);
+                                })
+                                .attr('x2', () => {
+                                    return x(topFlangeWidth * 0.85);
+                                })
+                                .attr('y1', () => {
+                                    return y(distance - flangeThickness);
+                                })
+                                .attr('y2', () => {
+                                    return y(distance - flangeThickness * 2);
+                                })
+                                .style('marker-start', 'url(#arrow)').style('stroke', '#000');
+
+                        // Web Label
+                        flangeThicknessDim.append('text')
+                                .attr('class', 'flangeThicknessLabel')
+                                .attr('x', () => {
+                                    return x(topFlangeWidth * 0.85);
+                                })
+                                .attr('dy', -4.0)
+                                .attr('y', () => {
+                                    return y(distance + flangeThickness * 0.95);
+                                })
+                                .style('fill', '#000').style('text-anchor', 'middle')
+                                .text('Tk = ' + flangeThickness + ' mm');
                     }
                 }else{
                     // Clear Screen

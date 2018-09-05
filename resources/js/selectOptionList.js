@@ -159,43 +159,23 @@ define([
                             d3.select('grpPath').attr('d', line);
                             // Update Title
                             d3.select('.title').text(wBeamDataset[1].designation);
-                            // Remove x and y axis
-                            d3.selectAll('.axis').remove();
 
-                            // Create Dimension line and label
+                            //Update Dimensions and label
+                            d3.select('.iBeamHeightLine')
+                            .attr('x1', () => {
+                                return x(-graphToolbox.margin.left * 0.5 - 30);
+                            })
+                            .attr('x2', () => {
+                                return x(-graphToolbox.margin.left * 0.5 - 30);
+                            })
+                            .attr('y1', () => {
+                                return y(0);
+                            }).transition().duration(100).delay(50)
+                            .attr('y2', () => {
+                                return y(wBeamDataset[1].distance);
+                            })
 
-                            // check if flangeDistanceDim is alrady present in the dom
-
-                            if(document.querySelectorAll('.flangeDistanceDim').length === 0){
-                                let flangeDistanceDim = d3.select('#grpRoot').append('g').attr('class', 'flangeDistanceDim');
-                                flangeDistanceDim.append('line').attr('class', 'flangeDimLine')
-                                .attr('x1', () => {
-                                    return x(-graphToolbox.margin.left * 0.5 - 50);
-                                })
-                                .attr('x2', () => {
-                                    return x(-graphToolbox.margin.left * 0.5 - 50);
-                                })
-                                .attr('y1', () => {
-                                    return y(wBeamDataset[1].distance);
-                                })
-                                .attr('y2', y(0))
-                                .style('stroke', "#000").style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
-
-                                d3.select('.flangeDistanceDim').append('text')
-                                    .attr('x', () => {
-                                        return x(-graphToolbox.margin.left * 0.5 - 50);
-                                    })
-                                    .attr('y', () => {
-                                        //y(-wBeamDataset[1].distance * 0.5); 
-                                        return y( ( wBeamDataset[1].distance / 2 ) );
-                                            
-                                    })
-                                    .attr('transform', 'rotate(90' + ',' + x(-graphToolbox.margin.left * 0.5 - 30) + ',' + y( ( wBeamDataset[1].distance / 2 ) ) + ')')
-                                    .style('fill', '#000').style('text-anchor', "middle")
-                                    .text('d = ' + wBeamDataset[1].distance + ' mm');
-    
-                            }else{ return}
-
+                            d3.select('.iBeamHeightLabel').text('d => '+ wBeamDataset[1].distance + ' mm');
                         break;
                     }
                 })
