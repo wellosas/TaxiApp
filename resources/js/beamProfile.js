@@ -259,6 +259,52 @@ define([
                                 })
                                 .style('fill', '#000').style('text-anchor', 'middle')
                                 .text('Tk = ' + flangeThickness + ' mm');
+
+                        // Center of Gravity
+                        let centerGravity = d3.select('#grpRoot').append('g').attr('id', 'centerGravity').classed('centerGravity', true);
+                            centerGravity.append('circle')
+                                .attr('class', 'cg_xy').attr('cx', () => {
+                                    return x(topFlangeWidth * 0.5)
+                                })
+                                .attr('cy', () => {
+                                    return y(distance * 0.5);
+                                })
+                                .attr('r', () => {
+                                    return x(web * 0.25);
+                                })
+                                .style('fill', 'none').style('stroke', '#000');
+
+                            centerGravity.append('g').attr('class', 'cgm_axis').append('line')
+                                .attr('class', 'cgm_x_axis')
+                                .attr('x1', () => {
+                                    return x(topFlangeWidth * 0.5);
+                                })
+                                .attr('x2', () => {
+                                    return x(topFlangeWidth * 0.5);
+                                })
+                                .attr('y1', () => {
+                                    return y(distance * 0.5);
+                                })
+                                .attr('y2', () => {
+                                    return y(distance * 0.5 + distance * 0.25);
+                                })
+                                .style('stroke', '#000').style('marker-end', 'url(#arrow)').style('stroke-dasharray', 2);
+
+                            centerGravity.append('g').attr('class', 'cgm_axis').append('line')
+                                .attr('class', 'cgm_y_axis')
+                                .attr('x1', () => {
+                                    return x(topFlangeWidth * 0.5);
+                                })
+                                .attr('x2', () => {
+                                    return x(topFlangeWidth * 0.5 + topFlangeWidth * 0.25);
+                                })
+                                .attr('y1', () => {
+                                    return y(distance * 0.5);
+                                })
+                                .attr('y2', () => {
+                                    return y(distance * 0.5);
+                                })
+                                .style('stroke', '#000').style('marker-end', 'url(#arrow)').style('stroke-dasharray', 2);
                     }
                 }else{
                     // Clear Screen
