@@ -11,7 +11,7 @@ define([
             }).attr('height', () => {
                 return graphToolbox.SVGProp.height;
             })
-                .style('display', 'block'),
+            .style('display', 'block'),
             
                 margin = {
                     top : 25,
@@ -274,8 +274,8 @@ define([
                                 })
                                 .style('fill', 'none').style('stroke', '#000');
 
-                            centerGravity.append('g').attr('class', 'cgm_axis').append('line')
-                                .attr('class', 'cgm_x_axis')
+                            centerGravity.append('g').attr('class', 'cgm_vert').append('line')
+                                .attr('class', 'cgm_y_axis')
                                 .attr('x1', () => {
                                     return x(topFlangeWidth * 0.5);
                                 })
@@ -290,8 +290,8 @@ define([
                                 })
                                 .style('stroke', '#000').style('marker-end', 'url(#arrow)').style('stroke-dasharray', 2);
 
-                            centerGravity.append('g').attr('class', 'cgm_axis').append('line')
-                                .attr('class', 'cgm_y_axis')
+                            centerGravity.append('g').attr('class', 'cgm_hor').append('line')
+                                .attr('class', 'cgm_x_axis')
                                 .attr('x1', () => {
                                     return x(topFlangeWidth * 0.5);
                                 })
@@ -305,6 +305,31 @@ define([
                                     return y(distance * 0.5);
                                 })
                                 .style('stroke', '#000').style('marker-end', 'url(#arrow)').style('stroke-dasharray', 2);
+
+                        d3.select('.cgm_hor').append('text')
+                                .attr('class', 'cgm_x_axis_label')
+                                .attr('x', () => {
+                                    return x(topFlangeWidth * 0.5 + topFlangeWidth * 0.25 + 10);
+                                })
+                                .attr('y', () => {
+                                    return y(distance * 0.5);
+                                })
+                                .style('fill', '#000').style('text-anchor', 'start')
+                                .text('Cx = '+ topFlangeWidth * 0.5 + 'mm');
+                        
+                        d3.select('.cgm_vert').append('text')
+                            .attr('class','cgm_y_axis_label')
+                            .attr('x', () => {
+                                return x(topFlangeWidth * 0.5);
+                            })
+                            .attr('y', () => {
+                                return y(distance * 0.5 + distance * 0.25 + 20);
+                            })
+                            .attr('dx', -5)
+                            .style('fill', '#000').style('text-anchor', 'start')
+                            .text('Cy = '+distance * 0.5 +'mm');
+
+                        
                     }
                 }else{
                     // Clear Screen

@@ -152,6 +152,36 @@ define([
                                 d.y = +d.y;                            
                             });
 
+                            var wBeamDerivedProp = {
+                                wBeamWidth : wBeamDataset[1].topFlangeWidth,
+                                wBeamDepth : wBeamDataset[1].distance,
+                                wBeamThickness : wBeamDataset[1].topFlangeThickness,
+                                wBeamWeb : wBeamDataset[1].web,
+                                flangeAreaTopBottom  : function(){
+                                    // Center of gravity for bottom flange
+                                    // Horizontal axis coincide and parallel to the bottom flange                                    
+                                    return this.wBeamWidth * this.wBeamThickness;
+                                },
+                                CMGBottomFlangeVertical : function(){
+                                    return this.wBeamThickness * 0.5;
+                                },
+                                CMGTopFlangeVertical : function(){
+                                    return (this.wBeamDepth - this.wBeamThickness - this.wBeamThickness)  + this.wBeamThickness + this.wBeamThickness / 2;
+                                },
+                                webArea: function() {
+                                    // Middle section                                    
+                                    return (this.wBeamDepth - 2 * this.wBeamThickness) * this.wBeamWeb;
+                                },
+                                CMGWebVertical : function() {
+                                    return  this.wBeamThickness + (this.wBeamDepth - this.wBeamThickness - this.wBeamThickness) / 2;
+                                },
+                                CGMWBeamVertical : function() {
+                                    return ( this.flangeAreaTopBottom() * this.CMGBottomFlangeVertical() + this.webArea() * this.CMGWebVertical()  + this.flangeAreaTopBottom() * this.CMGTopFlangeVertical()) / (this.flangeAreaTopBottom() + this.CMGWebVertical() + this.flangeAreaTopBottom())
+                                }
+                              
+                            };
+                            wBeamDerivedProp.printProp();
+                            console.log( wBeamDerivedProp.CMGWebVertical() );
                             x.domain(d3.extent(data, (d) => { return d.x; }));
                             y.domain(d3.extent(data, (d) => { return d.y; }));
 
