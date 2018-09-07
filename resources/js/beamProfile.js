@@ -27,10 +27,10 @@ define([
                 yAxis = d3.axisLeft(y),
                 line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { return y(d.y); }),
 
-                topFlangeWidth = 446.00,
-                flangeThickness = 89.90,
-                web = 50.00,
-                distance = 1028.00;
+                topFlangeWidth = 550,
+                flangeThickness = 70,
+                web = 45,
+                distance = 800;
 
                 var data = [
                     {
@@ -207,7 +207,7 @@ define([
                             })
                             .style('stroke', '#000').style('marker-start', 'url(#arrow)');
 
-                        iBeamWebDim.append('text').attr('class', 'iBeamWebLabel').attr('id', 'dim')
+                        iBeamWebDim.append('text').attr('class', 'ibeamWebLabel').attr('id', 'dim')
                             .attr('x', () => {
                                 return x( (topFlangeWidth * 0.5 + web * 0.5 + 20) / 1 );
                             })
