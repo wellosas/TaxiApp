@@ -157,8 +157,7 @@ define([
                             ];
                             data.forEach((d) => {
                                 d.x = +d.x;
-                                d.y = +d.y;
-                                console.log(d.x, d.y)                         
+                                d.y = +d.y;                                                     
                             });
 
                             x.domain(d3.extent(data, (d) => { return d.x; }));
@@ -200,9 +199,8 @@ define([
                                     return this.wBeamWidth * 0.5;
                                 }
                               
-                            };             
-                            
-                           
+                            };        
+                
                             // Update Title
                             d3.select('.title').text(wBeamDataset[1].designation);
 
@@ -219,9 +217,9 @@ define([
                             }).transition().duration(100).delay(50)
                             .attr('y2', () => {
                                 return y(wBeamDataset[1].distance);
-                            })
+                            });
 
-                            d3.select('.iBeamHeightLabel').text('d => '+ wBeamDataset[1].distance + ' mm');
+                            d3.select('.iBeamHeightLabel').text('d = '+ wBeamDataset[1].distance + ' mm');
 
                             d3.select('.ibeamWidthLine')
                                 .attr('x1', () => {
@@ -349,9 +347,153 @@ define([
                             })
                             .attr('y', () => {
                                 return y(wBeamDataset[1].distance * 0.5);
-                            }).text('Cx = '+wBeamDerivedProp.CMGBeamHorizontal() + 'mm')
+                            }).text('Cx = '+wBeamDerivedProp.CMGBeamHorizontal().toFixed(2) + 'mm');
 
+                            d3.select('.cgm_y_axis_label')
+                            .attr('x', () => {
+                                return x(wBeamDataset[1].topFlangeWidth * 0.5);
+                            })
+                            .attr('y', () => {
+                                return y(wBeamDataset[1].distance * 0.5 + wBeamDataset[1].distance * 0.25 + 20);
+                            })
+                            .attr('dx', -5)
+                            .text('Cy = ' + wBeamDerivedProp.CGMWBeamVertical().toFixed(2) + 'mm');
+                        break;
 
+                        case "W920x784" :
+                            var data = [
+                                {
+                                    x : 0,
+                                    y : 0
+                                },
+                                {
+                                    x : wBeamDataset[2].topFlangeWidth,
+                                    y : 0
+                                },
+                                {
+                                    x : wBeamDataset[2].topFlangeWidth,
+                                    y : wBeamDataset[2].topFlangeThickness,
+                                },
+                                {
+                                    x : (wBeamDataset[2].topFlangeWidth * 0.5) + (wBeamDataset[2].web * 0.5),
+                                    y : wBeamDataset[2].topFlangeThickness
+                                },
+                                {
+                                    x : (wBeamDataset[2].topFlangeWidth * 0.5) + (wBeamDataset[2].web * 0.5),
+                                    y : wBeamDataset[2].distance - wBeamDataset[2].topFlangeThickness
+                                },
+                                {
+                                    x : wBeamDataset[2].topFlangeWidth,
+                                    y : wBeamDataset[2].distance - wBeamDataset[2].topFlangeThickness
+                                },
+                                {
+                                    x : wBeamDataset[2].topFlangeWidth,
+                                    y : wBeamDataset[2].distance
+                                },
+                                {
+                                    x : 0,
+                                    y : wBeamDataset[2].distance
+                                },
+                                {
+                                    x : 0,
+                                    y : wBeamDataset[2].distance - wBeamDataset[2].topFlangeThickness
+                                },
+                                {
+                                    x : (wBeamDataset[2].topFlangeWidth * 0.5) - (wBeamDataset[2].web * 0.5),
+                                    y :  wBeamDataset[2].distance - wBeamDataset[2].topFlangeThickness
+                                },
+                                {
+                                    x : (wBeamDataset[2].topFlangeWidth * 0.5) - (wBeamDataset[2].web * 0.5),
+                                    y : wBeamDataset[2].topFlangeThickness
+                                },
+                                {
+                                    x : 0,
+                                    y : wBeamDataset[2].topFlangeThickness
+                                },
+                                {
+                                    x : 0,
+                                    y : 0
+                                }
+                            ];
+                            data.forEach((d) => {
+                                d.x = +d.x;
+                                d.y = +d.y;                        
+                            });
+
+                            x.domain(d3.extent(data, (d) => { return d.x; }));
+                            y.domain(d3.extent(data, (d) => { return d.y; }));
+
+                            // Update Profile
+                            d3.select('.line').datum(data).transition().duration(100).delay((d, i) => { return i / 2; })
+                            .attr('d', line);
+
+                            var wBeamDerivedProp = {
+                                wBeamWidth : wBeamDataset[2].topFlangeWidth,
+                                wBeamDepth : wBeamDataset[2].distance,
+                                wBeamThickness : wBeamDataset[2].topFlangeThickness,
+                                wBeamWeb : wBeamDataset[2].web,
+                                flangeAreaTopBottom  : function(){
+                                    // Center of gravity for bottom flange
+                                    // Horizontal axis coincide and parallel to the bottom flange                                    
+                                    return this.wBeamWidth * this.wBeamThickness;
+                                },
+                                CMGBottomFlangeVertical : function(){
+                                    return this.wBeamThickness * 0.5;
+                                },
+                                CMGTopFlangeVertical : function(){
+                                    return (this.wBeamDepth - this.wBeamThickness - this.wBeamThickness)  + this.wBeamThickness + this.wBeamThickness / 2;
+                                },
+                                webArea: function() {
+                                    // Middle section                                    
+                                    return (this.wBeamDepth - 2 * this.wBeamThickness) * this.wBeamWeb;
+                                },
+                                CMGWebVertical : function() {
+                                    return  this.wBeamThickness + (this.wBeamDepth - this.wBeamThickness - this.wBeamThickness) / 2;
+                                },
+                                CGMWBeamVertical : function() {
+                                    let ay = this.flangeAreaTopBottom() * this.CMGBottomFlangeVertical() + this.webArea() * this.CMGWebVertical()  + this.flangeAreaTopBottom() * this.CMGTopFlangeVertical(),
+                                    sa = this.flangeAreaTopBottom() + this.webArea() + this.flangeAreaTopBottom();
+                                    return ( ay ) / ( sa );
+                                },
+                                CMGBeamHorizontal : function() {
+                                    return this.wBeamWidth * 0.5;
+                                }
+                              
+                            };
+                            
+                            // Update Title
+                            d3.select('.title').text(wBeamDataset[2].designation);
+
+                            //Update Dimensions and label
+                            d3.select('.iBeamHeightLine')
+                            .attr('x1', () => {
+                                return x(-graphToolbox.margin.left * 0.5 - 30);
+                            })
+                            .attr('x2', () => {
+                                return x(-graphToolbox.margin.left * 0.5 - 30);
+                            })
+                            .attr('y1', () => {
+                                return y(0);
+                            }).transition().duration(100).delay(50)
+                            .attr('y2', () => {
+                                return y(wBeamDerivedProp.wBeamDepth);
+                            });
+
+                            d3.select('.iBeamHeightLabel').text('d = '+ wBeamDataset[2].distance + ' mm');
+
+                            d3.select('.ibeamWidthLine')
+                                .attr('x1', () => {
+                                    return x(0);
+                                })
+                                .attr('x2', () => {
+                                    return x(wBeamDataset[2].topFlangeWidth);
+                                })
+                                .attr('y1', () => {
+                                    return y( -height + graphToolbox.margin.bottom + graphToolbox.margin.top + 20 );
+                                })
+                                .attr('y2', () => {
+                                    return y( -height + graphToolbox.margin.bottom + graphToolbox.margin.top + 20 );
+                                });
                         break;
                     }
                 })

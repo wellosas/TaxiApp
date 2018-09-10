@@ -365,16 +365,14 @@ define([
                 }
         },
         drawCChannelMetric: function() {
-            const svg = d3.select('.beam').attr('width', 335).attr('height', 335)
+            const svg = d3.select('.beam').attr('width', () => {
+                return graphToolbox.SVGProp.width;
+            }).attr('height', () => {
+                return graphToolbox.SVGProp.height;
+            })
             .style('display', 'block'),
-            margin = {
-                top : 50,
-                bottom : 50,
-                left : 50,
-                right : 50
-            },
-            width = +svg.attr('width') - margin.left - margin.right,
-            height = +svg.attr('height') - margin.top - margin.bottom,
+            width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right,
+            height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom,
             x = d3.scaleLinear().range([0, width]),
             y = d3.scaleLinear().range([height, 0]),
             xAxis = d3.axisBottom(x),
@@ -451,7 +449,9 @@ define([
                             .call(yAxis.ticks(4));
             }else{
                  
-                d3.select('.line').remove();
+                d3.select('.line')
+                .datum(data)
+                .attr('d', line).style('fill-rule', 'evenodd');
                  // clear title and update
                  d3.select('.title').text("");
                  d3.select('.title').text("C-Channel Beam Metric");
@@ -460,14 +460,6 @@ define([
 
                  x.domain(d3.extent(data, (d) => { return d.x; }));
                  y.domain(d3.extent(data, (d) => { return d.y; }));
- 
-                  // Draw Beam
-                  g.append('path')
-                  .datum(data)
-                  .attr('d', line)
-                  .attr('class', 'line')
-                  .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
-                  .style('fill-rule', 'evenodd').style('stroke', '#000');
 
                   //clear x and y axis, then reappend
                   //d3.selectAll('.axis').remove();
