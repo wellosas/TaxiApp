@@ -12,13 +12,7 @@ define([
                 return graphToolbox.SVGProp.height;
             })
             .style('display', 'block'),
-            
-                margin = {
-                    top : 25,
-                    bottom : 25,
-                    left : 50,
-                    right : 25
-                },
+
                 width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right,
                 height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom,
                 x = d3.scaleLinear().range([0, width]),
@@ -98,7 +92,7 @@ define([
                     const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + graphToolbox.margin.left + ',' + graphToolbox.margin.top + ')');
 
                     // Append title
-                    g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(margin.top * 0.5); })
+                    g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(graphToolbox.margin.top * 0.5); })
                         .attr('class', 'title').attr('id', 'title').style('text-anchor', 'end').style('font-size', '10px')
                         .text("I Beam Metric");
 
@@ -594,6 +588,74 @@ define([
                 let gx = d3.select('.x-axis').call(xAxis);
                 let gy = d3.select('.y-axis').call(yAxis.ticks(4));
             }
-        }    
+        },
+        drawAngleMetric: function() {
+            let svg = d3.select('.beam').style('background', () => {
+                return graphToolbox.SVGProp.backgroundColor;
+            }).style('display', 'block'),
+
+            width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right,
+            height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom,
+            x = d3.scaleLinear().range([0, width]),
+            y = d3.scaleLinear().range([height, 0]),
+            line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { return y(d.y); }),
+            xAxis = d3.axisBottom(x),
+            yAxis = d3.axisLeft(y);
+
+            var angleDepth = 50.50,
+            angleWidth = 50.50,
+            angleThickness = 7.25,
+            angleBeamData = [
+                {
+                    x : 0,
+                    y : 0
+                },
+                {
+                    x : angleWidth,
+                    y : 0
+                },
+                {
+                    x : angleWidth,
+                    y : angleThickness
+                },
+                {
+                    x : angleThickness,
+                    y : angleThickness
+                },
+                {
+                    x : angleThickness,
+                    y : angleDepth
+                },
+                {
+                    x : 0,
+                    y : angleDepth
+                },
+                {
+                    x : 0,
+                    y : 0
+                }
+            ];
+
+            angleBeamData.forEach((d) => {
+                d.x = +d.x;
+                d.y = +d.y;
+            });
+
+            x.domain(d3.extent(angleBeamData, (d) => { return d.x; }));
+            y.domain(d3.extent(angleBeamData, (d) => { return d.y; }));
+            if(document.querySelectorAll('#grpRoot').length == 0){
+                let g = svg.append('g').attr('class', 'grpRoot')
+                .attr('transform', 'translate(' + graphToolbox.margin.left + ',' + graphToolbox.margin.top + ')');
+
+                // Append title
+                g.append('text').attr('x', () => { return width*0.25; }).attr('y', () => { return -graphToolbox.margin.top * 0.5; })
+                .text('Equal Legged Angle').style('text-anchor', 'start');
+
+                g.append('g').attr('class', 'grpLine').append('path').datum(angleBeamData)
+                .attr('d', line).style('stroke', '#000').style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed');
+            }else{
+
+            }
+        }   
     }    
 });

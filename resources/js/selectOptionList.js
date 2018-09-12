@@ -59,7 +59,7 @@ define([
                     fileLoader.ajax('./resources/doc/cChannelMetric.json').then((o) => {
                         var cChannel = JSON.parse(o);
                         for(var c in cChannel){
-                            console.log(cChannel[c].designation);
+                            //console.log(cChannel[c].designation);
                             var newOption = document.createElement('option')
                             newOption.innerHTML = cChannel[c].designation;
                             s2.options.add(newOption);
@@ -67,8 +67,21 @@ define([
                     }).catch((err) => { return console.log(err); });
                 
             }else if( s1.options[selIndex].text == "HSS" ){
-                beamProfile.drawHssMetric();
-                fileLoader.loadJson('./resources/doc/beam.json');
+                beamProfile.drawHssMetric();                
+            }else if (s1.options[selIndex].text == "Angle") {
+                beamProfile.drawAngleMetric();
+                fileLoader.ajax('./resources/doc/angleBeamMetric.json')
+                    .then( (o) => {
+                        var angleBeam = JSON.parse(o);
+                        //console.log(angleBeam);
+                        for(var l in angleBeam){
+                            //console.log(cChannel[c].designation);
+                            var newOption = document.createElement('option')
+                            newOption.innerHTML = angleBeam[l].designation;
+                            s2.options.add(newOption);
+                        }
+                    })
+                    .catch((err) => { return console.log(err); });
             }
         },
         selectOptionBeamDesignationMetric: function(){
