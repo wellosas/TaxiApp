@@ -522,12 +522,69 @@ define([
             var s = document.querySelector('#beam_designation');
             let selIndex = s.selectedIndex,
             switchAction = s.options[selIndex].text;
+            const svg = d3.select('.beam').style('background-color', () => {
+                return graphToolbox.SVGProp.backgroundColor;
+            });
+            let width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right;
+            let height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom;
+            let x = d3.scaleLinear().range([0, width]);
+            let y =  d3.scaleLinear().range([height, 0]);
+            let xAxis = d3.axisBottom(x);
+            let yAxis = d3.axisLeft(y);
+            let line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { return y(d.y); });
+
             fileLoader.ajax('./resources/doc/angleBeamMetric.json')
                 .then((o) => {
                     let angleBeamdata = JSON.parse(o);
+                    console.log(angleBeamdata);
                     switch (switchAction){
                         case "L98x98x9.5":
-                        console.log(s.options[selIndex].text)
+                            var data = [
+                                {
+                                    x : 0,
+                                    y : 0
+                                },
+                                {
+                                    x : angleBeamdata[1].b,
+                                    y : 0
+                                },
+                                {
+                                    x : angleBeamdata[1].b,
+                                    y : angleBeamdata[1].t
+                                },
+                                {
+                                    x : angleBeamdata[1].t,
+                                    y : angleBeamdata[1].t
+                                },
+                                {
+                                    x : angleBeamdata[1].t,
+                                    y : angleBeamdata[1].d
+                                },
+                                {
+                                    x : 0,
+                                    y : angleBeamdata[1].d
+                                },
+                                {
+                                    x : 0,
+                                    y : 0
+                                }
+                            ];
+                            data.forEach( (d) => {
+                                d.x = +d.x;
+                                d.y = +d.y;
+                                console.log(d.x ,d.y);
+                            });
+                            x.domain(d3.extent(data, (d) => { return d.x; }));
+                            y.domain(d3.extent(data, (d) => { return d.y; }));
+                            // update title
+                            d3.select('.title').transition().duration(100).delay(25).text(angleBeamdata[1].designation);
+                            // remove x and y axis
+                            d3.selectAll('.axis').transition().duration(100).delay(25).remove();
+                            // update shape
+                            d3.select('.shape').datum(data).transition().duration(100).delay( (d, i) => { return i; })
+                                .attr('d', line);
+                            //display dimensions and update them
+                            d3.select('.dim').style('display', 'block');
                         break;
                     }
                 })

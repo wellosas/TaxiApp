@@ -673,7 +673,7 @@ define([
                 .text('Equal Legged Angle').style('text-anchor', 'start');
 
                 g.append('g').attr('class', 'grpPath').append('path').datum(angleBeamData)
-                .attr('d', line).style('stroke', '#000').style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed');
+                .attr('d', line).classed('shape', true).style('stroke', '#000').style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed');
 
                 /*g.append('path').classed('path', true)
                     .attr('d', angleShapGenerator).style('stroke', 'red').style('fill', 'lightsteelblue').style('shape-rendering', 'geometricPrecision').style('stroke-width', '0.75');*/
