@@ -4,8 +4,7 @@ define([
 ], function(d3, graphToolbox) {
     'use strict';
     return {
-        drawIbeamMetric: function() {
-            
+        drawIbeamMetric: function() {            
             const svg = d3.select('.beam').attr('width', () => {
                 return graphToolbox.SVGProp.width;
             }).attr('height', () => {
@@ -135,7 +134,7 @@ define([
                                 return x(-graphToolbox.margin.left * 0.5 - 20);
                             })
                             .attr('y', () => {
-                                //y(-wBeamDataset[1].distance * 0.5); 
+                               
                                 return y( ( distance / 2 ) );
                                     
                             })
@@ -471,13 +470,13 @@ define([
                     
         },
         drawHssMetric: function() {            
-            const svg = d3.select('.beam').attr('width', 335).attr('height', 335)
+            const svg = d3.select('.beam').attr('width', 225).attr('height', 225)
             .style('display', 'block'),
             margin = {
-                top : 50,
-                bottom : 50,
-                left : 50,
-                right : 50
+                top : 25,
+                bottom : 25,
+                left : 25,
+                right : 25
             },
             width = +svg.attr('width') - margin.left - margin.right,
             height = +svg.attr('height') - margin.top - margin.bottom,
@@ -590,17 +589,23 @@ define([
             }
         },
         drawAngleMetric: function() {
-            let svg = d3.select('.beam').style('background', () => {
+            const svg = d3.select('.beam').attr('width', () => {
+                return graphToolbox.SVGProp.width;
+            })
+            .attr('height', () => {
+                return graphToolbox.SVGProp.height;
+            })
+            .style('background', () => {
                 return graphToolbox.SVGProp.backgroundColor;
             }).style('display', 'block'),
 
             width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right,
             height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom,
             x = d3.scaleLinear().range([0, width]),
-            y = d3.scaleLinear().range([height, 0]),
-            line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { return y(d.y); }),
+            y = d3.scaleLinear().range([height, 0]),            
             xAxis = d3.axisBottom(x),
-            yAxis = d3.axisLeft(y);
+            yAxis = d3.axisLeft(y),
+            line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { return y(d.y); });
 
             var angleDepth = 50.50,
             angleWidth = 50.50,
@@ -640,21 +645,222 @@ define([
                 d.x = +d.x;
                 d.y = +d.y;
             });
-
             x.domain(d3.extent(angleBeamData, (d) => { return d.x; }));
             y.domain(d3.extent(angleBeamData, (d) => { return d.y; }));
-            if(document.querySelectorAll('#grpRoot').length == 0){
-                let g = svg.append('g').attr('class', 'grpRoot')
-                .attr('transform', 'translate(' + graphToolbox.margin.left + ',' + graphToolbox.margin.top + ')');
+
+             function angleShapGenerator() {
+                let b = angleWidth,
+                t = angleThickness,
+                d = angleDepth;
+                return `M ${x(0)}, ${y(0)}
+                        L ${x(b)}, ${y(0)}
+                        L ${x(b)}, ${y(t/2)}
+                        A ${x(t/2)}, ${y(t/2)} 0 0 0 ${x(b - t/2)} ${y(t)}
+                        L ${x(t + t/2)}, ${y(t)}
+                        A ${x(t/2)}, ${y(t/2)} 0 0 1 ${x(t)}, ${y(t + t/2)}
+                        L ${x(t)}, ${y(d - t/2)}
+                        A ${x(t/2)}, ${y(t/2)} 0 0 0 ${x(t/2)}, ${y(d)}
+                        L ${x(0)}, ${y(d)}
+                        L ${x(0)}, ${y(0)}
+                `;
+            };
+            
+            if(document.querySelectorAll('.beam #grpRoot').length == 0){
+                const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + graphToolbox.margin.left + ' ,' + graphToolbox.margin.top + ')');
 
                 // Append title
-                g.append('text').attr('x', () => { return width*0.25; }).attr('y', () => { return -graphToolbox.margin.top * 0.5; })
+                g.append('text').classed('title', true).attr('x', () => { return width*0.25; }).attr('y', () => { return -graphToolbox.margin.top * 0.5; })
                 .text('Equal Legged Angle').style('text-anchor', 'start');
 
-                g.append('g').attr('class', 'grpLine').append('path').datum(angleBeamData)
+                g.append('g').attr('class', 'grpPath').append('path').datum(angleBeamData)
                 .attr('d', line).style('stroke', '#000').style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed');
-            }else{
 
+                /*g.append('path').classed('path', true)
+                    .attr('d', angleShapGenerator).style('stroke', 'red').style('fill', 'lightsteelblue').style('shape-rendering', 'geometricPrecision').style('stroke-width', '0.75');*/
+
+
+                g.append('g').attr('class', 'x-axis axis').attr('transform', 'translate(0,' + (height + graphToolbox.margin.bottom * 0.25) +')')
+                .style('font-size', '8px')
+                .call(xAxis.ticks(4));
+
+                g.append('g').attr('class', 'yaxis axis').style('font-size', '8px')
+                .attr('transform', 'translate(' + (-graphToolbox.margin.left * 0.25) + ',' + 0 +')')
+                .call(yAxis.ticks(4));
+
+                // Remove fill properties of class domain in both x and y axis
+                d3.selectAll('.domain').style('fill', 'none').style('stroke', 'steelblue');
+
+                let beamDim = g.append('g').attr('class', 'dim').attr('id', 'dim')
+                .style('stroke', '#000').style('text-anchor', 'middle').style('font-size', '8px')
+                .style('stroke', "#000").style('display', 'none');                   
+                // Beam Depth : d
+                beamDim.append('line').attr('class', 'beamHeigthLine')
+                    .attr('x1', () => {
+                        return (-graphToolbox.margin.left * 0.25);
+                    })
+                    .attr('x2', () => {
+                        return (-graphToolbox.margin.left * 0.25);
+                    })
+                    .attr('y1', () => {
+                        return y( angleDepth );
+                    })
+                    .attr('y2', () => {
+                        return y(0);
+                    }).style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
+                    
+
+                    // beam depth label
+                    beamDim.append('text').attr('class', 'beamHeightLabel')
+                    .attr('x', () => {
+                        return (-graphToolbox.margin.left * 0.5 - 20);
+                    })
+                    .attr('y', () => {
+                       
+                        return y( ( angleDepth / 2 ) );
+                            
+                    })
+                    .attr('transform', 'rotate(90' + ',' + (-graphToolbox.margin.left * 0.25 - 10) + ' ,' + y( ( angleDepth / 2 ) ) + ')')
+                    .text('d = ' + angleDepth + ' mm');
+
+                // Beam width : b
+                beamDim.append('line').attr('class','beamWidthLine')
+                    .attr('x1', () => {
+                        return x(0);
+                    })
+                    .attr('x2', () => {
+                        return x(angleWidth);
+                    })
+                    .attr('y1', () => {
+                        return (height) + (graphToolbox.margin.bottom * 0.5);
+                    })
+                    .attr('y2', () => {
+                        return (height) + (graphToolbox.margin.bottom * 0.5);
+                    }).style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
+
+                beamDim.append('text').attr('class', 'beamWidthLable')
+                    .attr('x', () => {
+                       return x( angleWidth / 2 );
+                    })
+                    .attr('y', () => {
+                        return (height) + (graphToolbox.margin.bottom * 0.35);
+                    })
+                    .text('b = ' + angleWidth + 'mm');
+
+                // beam thickness
+                beamDim.append('g').classed('grpThickness', true).append('line').classed('ext_line_upper', true)
+                    .attr('x1', () => {
+                        return  ( width + 2 );
+                    })
+                    .attr('x2', () => {
+                        return (width + graphToolbox.margin.right / 2);
+                    })
+                    .attr('y1', () => {
+                        return y(angleThickness);
+                    })
+                    .attr('y2', () => {
+                        return y(angleThickness);
+                    });
+
+                    d3.select('.grpThickness').append('line').classed('ext_line_lower', true)
+                    .attr('x1', () => {
+                        return  ( width + 2 );
+                    })
+                    .attr('x2', () => {
+                        return (width + 2 + graphToolbox.margin.right / 2);
+                    })
+                    .attr('y1', () => {
+                        return y(0);
+                    })
+                    .attr('y2', () => {
+                        return y(0);
+                    });
+                
+                d3.select('.grpThickness').append('line').classed('tickLine_above', true)
+                    .attr('x1', () => {
+                        return  width  + graphToolbox.margin.right*0.25 ;
+                    })
+                    .attr('x2', () => {
+                        return width  + graphToolbox.margin.right*0.25;
+                    })
+                    .attr('y1', () => {
+                        return y(angleThickness);
+                    })
+                    .attr('y2', () => {
+                        return y(angleThickness * 2);
+                    }).style('marker-start', 'url(#arrow)');
+
+                d3.select('.grpThickness').append('line').classed('tickLine_above_adden', true)
+                    .attr('x1', () => {
+                        return width  + graphToolbox.margin.right*0.25 ;
+                    })
+                    .attr('x2', () => {
+                        return width*0.65  + graphToolbox.margin.right*0.25 ;
+                    })
+                    .attr('y1', () => {
+                        return y(angleThickness*2);
+                    })
+                    .attr('y2', () => {
+                        return y(angleThickness*2);
+                    });
+
+
+                d3.select('.grpThickness').append('line').classed('thickLine_below', true)
+                .attr('x1', () => {
+                    return  width  + graphToolbox.margin.right*0.25 ;
+                })
+                .attr('x2', () => {
+                    return width  + graphToolbox.margin.right*0.25;
+                })
+                .attr('y1', () => {
+                    return y(0);
+                })
+                .attr('y2', () => {
+                    return y(-angleThickness);
+                }).style('marker-start', 'url(#arrow)');
+
+                d3.select('.grpThickness').append('text').classed('beamThicknessLabel', true)
+                    .attr('x', () => {
+                        return width*0.85 + graphToolbox.margin.right*0.125;
+                    })
+                    .attr('y', () => {
+                        return y(angleThickness * 2.125);
+                    })
+                    //.attr('transform', 'rotate(' + width + graphToolbox.margin.right + ',' + y(angleThickness * 2) + ')')
+                    .text('t = ' + angleThickness + 'mm');
+
+                // Center of gravity
+                var cg = beamDim.append('g').classed('centerGravity', true).style('font', 'monospace 8px')
+                    .style('stroke', "#000").style('marker-start', 'url(#dot)').style('marker-end', 'url(#arrow)');
+                    cg.append('circle').classed('centerPoint', true)
+                    .attr('cx', () => {
+                        return x(angleWidth/2);
+                    })
+                    .attr('cy', () => {
+                        return y(angleDepth/2);
+                    })
+                    .attr('r', 5)
+                    .style('fill', 'none');
+        
+                cg.append('line').classed('cgy', true).attr('x1', () => { return x(angleWidth/2); }).attr('x2', () => { return x(angleWidth/2); })
+                    .attr('y1', () => { return y(angleDepth/2); }).attr('y2', () => { return y(angleDepth - angleDepth * 0.25); }).style('stroke-dasharray', 3);
+
+                cg.append('line').classed('cgx', true)
+                    .attr('x1', () => { return x(angleWidth/2); }).attr('x2', () => { return x(angleWidth - angleWidth * 0.25); })
+                    .attr('y1', () => { return y(angleDepth/2); }).attr('y2', () => { return y(angleDepth/2); }).style('stroke-dasharray', 3);
+
+                cg.append('text').classed('cgxLabel', true)
+                    .attr('x', () => { return x(angleWidth - angleWidth * 0.25 + 2); }).attr('y', () => {return y(angleDepth/2)}).style('text-anchor', 'start')
+                    .text('cx = '+0.00+'mm');
+
+                cg.append('text').classed('cgyLabel', true).attr('x', () => { return x(angleWidth/2); }).attr('y', () => { return y(angleDepth - angleDepth * 0.25 + 2); })
+                    .text('cy = ' + 0.00 + 'mm');
+            }else{                
+                // update title
+                d3.select('.title').transition().duration(100).delay(25).text("Equal Legged Angle");
+
+                // update path                
+                d3.select('.line').datum(angleBeamData)
+                .attr('d', line);
             }
         }   
     }    

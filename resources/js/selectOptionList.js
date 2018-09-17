@@ -37,7 +37,6 @@ define([
             s1 = document.querySelector('#beam_shape');
             s2 = document.querySelector('#beam_designation');
             let selIndex = s1.selectedIndex;
-
             s2.innerHTML = "";
             if (s1.value == ""){
                 return;
@@ -87,6 +86,7 @@ define([
         selectOptionBeamDesignationMetric: function(){
             document.querySelector('#beam_designation').addEventListener('change', () => {
                 this.onChangeDesignationMetric();
+                this.onChangeAngleMetric();
             }, false);
 
         },
@@ -508,11 +508,32 @@ define([
                                     return y( -height + graphToolbox.margin.bottom + graphToolbox.margin.top + 20 );
                                 });
                         break;
-                    }
+                    }// end switch statment
                 })
                 .catch((err) => { return console.log(err); });
             
-        }// end Switch Statement
+        },
+        selectOptionAngleDesignationMetric : function(){
+            document.querySelector('#beam_designation').addEventListener('change', () => {
+
+            },false);
+        },
+        onChangeAngleMetric: function(s) {
+            var s = document.querySelector('#beam_designation');
+            let selIndex = s.selectedIndex,
+            switchAction = s.options[selIndex].text;
+            fileLoader.ajax('./resources/doc/angleBeamMetric.json')
+                .then((o) => {
+                    let angleBeamdata = JSON.parse(o);
+                    switch (switchAction){
+                        case "L98x98x9.5":
+                        console.log(s.options[selIndex].text)
+                        break;
+                    }
+                })
+                .catch( (err) => { return console.error(err); })
+        }
+    
             
     } // end main method
 });

@@ -186,6 +186,15 @@ svg{
     border-radius: 5px;
     shape-rendering: crispEdges;/* geometricPrecision, optimizeSpeed;*/
 }
+.axis path {
+    display: none;
+  }
+  
+  .axis line,
+  .axis path {
+    fill: none;
+    stroke: #000;
+  }
 /*
 @media only screen and (max-width: 420px){
     .beamReport {

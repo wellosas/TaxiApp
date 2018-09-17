@@ -4,10 +4,10 @@ define([
     'use strict';
     return {
         margin : {
-            top : 25,
-            bottom : 25,
-            left : 25,
-            right : 25
+            top : 33.75,
+            bottom : 33.75,
+            left : 33.75,
+            right : 33.75,
         },
         SVGProp : {
             width : 225,
