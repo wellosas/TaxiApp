@@ -1,6 +1,9 @@
 [
     {
-        "designation" : "Please Select"
+        "designation" : "Please Select",
+        "d" : null,
+        "b" : null,
+        "t" : null
     },
     {
         "designation" : "L98x98x9.5",

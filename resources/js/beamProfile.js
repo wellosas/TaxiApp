@@ -99,22 +99,22 @@ define([
                     g.append('g').attr('class', 'grpPath').append('path')
                         .datum(data)
                         .attr('d', line)
-                        .attr('class', 'line')
-                        .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
+                        .attr('class', 'shape')
+                        .style('fill', '#ccc').style('shape-rendering', 'geometricPrecision')
                         .style('fill-rule', 'evenodd').style('stroke', '#000');
 
-                    /*g.append('g').attr('class', 'axis x-axis').attr('transform', 'translate(0,'+ (height + 10) + ')')
+                    g.append('g').attr('class', 'axis x-axis').attr('transform', 'translate(0,'+ (height + 10) + ')')
                         .style('font-size', '8px')
                         .call(xAxis.ticks(4));
 
                    g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
-                        .attr('transform', 'translate(' + (-margin.left * 0.25) + ',' + 0 + ')')
-                        .call(yAxis.ticks(4));*/
+                        .attr('transform', 'translate(' + (-graphToolbox.margin.left * 0.25) + ',' + 0 + ')')
+                        .call(yAxis.ticks(4));
 
-                    // check if dimension line has been appended to the dom
-                    if ( document.querySelectorAll('.iBeamHeightDim').length == 0 ){
-                        let iBeamHeightDim = d3.select('#grpRoot').append('g').attr('class', 'iBeamHeightDim').attr('id', 'iBeamHeightDim');
-                        iBeamHeightDim.append('line').attr('class', 'iBeamHeightLine')
+                    var beamDim = g.append('g').attr('id', 'dim').classed('dim', true).style('display', 'none');
+                    
+                        
+                        beamDim.append('line').attr('class', 'beamHeightLine')
                             .attr('x1', () => {
                                 return x(-graphToolbox.margin.left * 0.5 - 30);
                             })
@@ -128,8 +128,8 @@ define([
                             .style('stroke', "#000").style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
 
                         // Ibeam Height Dim label
-                        iBeamHeightDim.append('text')
-                            .attr('class', 'iBeamHeightLabel')
+                        beamDim.append('text')
+                            .attr('class', 'beamHeightLabel')
                             .attr('x', () => {
                                 return x(-graphToolbox.margin.left * 0.5 - 20);
                             })
@@ -323,38 +323,9 @@ define([
                             .text('Cy = '+distance * 0.5 +'mm');
 
                         
-                    }
+                    
                 }else{
-                    // Clear Screen
-                    d3.select('.line').transition().duration(100).delay(25).remove();                  
-
-                    // Update Title
-                    d3.select('.title').transition().duration(100).delay(25).text('I Beam Design Properties');
-                    let g = d3.select('#grpRoot');
-
-                    x.domain(d3.extent(data, (d) => { return d.x; }));
-                    y.domain(d3.extent(data, (d) => { return d.y; }));
-
-                    g.append('g').attr('id', 'line').attr('class', 'line')
-                        .append('path')
-                        .datum(data)
-                        .attr('d', line)
-                        .attr('class', 'line')
-                        .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
-                        .style('fill-rule', 'evenodd').style('stroke', '#000');
-
-                    //Clear Reappend the x and y axis
-                    //d3.selectAll('.axis').remove();
-                    /*var gx = g.append('g').attr('class', 'x-axis').attr('transform', 'translate(0,'+ height + ')')
-                        .style('font-size', '8px')
-                        .call(xAxis);
-
-                    var gy = g.append('g').attr('class', 'y-axis').style('font-size', '8px')
-                        .call(yAxis); */
-
-                    let gx = d3.select('.x-axis').call(xAxis.ticks(4));
-                    let gy = d3.select('.y-axis').call(yAxis.ticks(4));
-
+                   
                 }
         },
         drawCChannelMetric: function() {
@@ -670,10 +641,13 @@ define([
 
                 // Append title
                 g.append('text').classed('title', true).attr('x', () => { return width*0.25; }).attr('y', () => { return -graphToolbox.margin.top * 0.5; })
-                .text('Equal Legged Angle').style('text-anchor', 'start');
+                .text('Equal Legged Angle').style('text-anchor', 'start').append('tspan').attr('dy', 10)
+                .attr('x', () => { return width*0.25; })
+                .text('milimeters');
 
                 g.append('g').attr('class', 'grpPath').append('path').datum(angleBeamData)
-                .attr('d', line).classed('shape', true).style('stroke', '#000').style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed');
+                .attr('d', line).classed('shape', true).style('stroke', '#000')
+                .style('fill', '#ccc').style('shape-rendering', 'geometricPrecision');
 
                 /*g.append('path').classed('path', true)
                     .attr('d', angleShapGenerator).style('stroke', 'red').style('fill', 'lightsteelblue').style('shape-rendering', 'geometricPrecision').style('stroke-width', '0.75');*/
@@ -685,14 +659,9 @@ define([
 
                 g.append('g').attr('class', 'yaxis axis').style('font-size', '8px')
                 .attr('transform', 'translate(' + (-graphToolbox.margin.left * 0.25) + ',' + 0 +')')
-                .call(yAxis.ticks(4));
+                .call(yAxis.ticks(4));                
 
-                // Remove fill properties of class domain in both x and y axis
-                d3.selectAll('.domain').style('fill', 'none').style('stroke', 'steelblue');
-
-                let beamDim = g.append('g').attr('class', 'dim').attr('id', 'dim')
-                .style('stroke', '#000').style('text-anchor', 'middle').style('font-size', '8px')
-                .style('stroke', "#000").style('display', 'none');                   
+                let beamDim = g.append('g').attr('class', 'dim').attr('id', 'dim').style('display', 'none');                  
                 // Beam Depth : d
                 beamDim.append('line').attr('class', 'beamHeigthLine')
                     .attr('x1', () => {
@@ -706,7 +675,8 @@ define([
                     })
                     .attr('y2', () => {
                         return y(0);
-                    }).style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
+                    }).style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)')
+                    .style('stroke', '#000');
                     
 
                     // beam depth label
@@ -735,9 +705,10 @@ define([
                     })
                     .attr('y2', () => {
                         return (height) + (graphToolbox.margin.bottom * 0.5);
-                    }).style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
+                    }).style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)')
+                    .style('stroke', '#000');
 
-                beamDim.append('text').attr('class', 'beamWidthLable')
+                beamDim.append('text').attr('class', 'beamWidthLabel')
                     .attr('x', () => {
                        return x( angleWidth / 2 );
                     })
@@ -759,7 +730,7 @@ define([
                     })
                     .attr('y2', () => {
                         return y(angleThickness);
-                    });
+                    }).style('stroke', '#000');
 
                     d3.select('.grpThickness').append('line').classed('ext_line_lower', true)
                     .attr('x1', () => {
@@ -773,7 +744,7 @@ define([
                     })
                     .attr('y2', () => {
                         return y(0);
-                    });
+                    }).style('stroke', '#000');
                 
                 d3.select('.grpThickness').append('line').classed('tickLine_above', true)
                     .attr('x1', () => {
@@ -787,7 +758,7 @@ define([
                     })
                     .attr('y2', () => {
                         return y(angleThickness * 2);
-                    }).style('marker-start', 'url(#arrow)');
+                    }).style('marker-start', 'url(#arrow)').style('stroke', '#000');
 
                 d3.select('.grpThickness').append('line').classed('tickLine_above_adden', true)
                     .attr('x1', () => {
@@ -801,7 +772,7 @@ define([
                     })
                     .attr('y2', () => {
                         return y(angleThickness*2);
-                    });
+                    }).style('stroke', '#000');
 
 
                 d3.select('.grpThickness').append('line').classed('thickLine_below', true)
@@ -816,7 +787,7 @@ define([
                 })
                 .attr('y2', () => {
                     return y(-angleThickness);
-                }).style('marker-start', 'url(#arrow)');
+                }).style('marker-start', 'url(#arrow)').style('stroke', '#000');
 
                 d3.select('.grpThickness').append('text').classed('beamThicknessLabel', true)
                     .attr('x', () => {
@@ -829,8 +800,8 @@ define([
                     .text('t = ' + angleThickness + 'mm');
 
                 // Center of gravity
-                var cg = beamDim.append('g').classed('centerGravity', true).style('font', 'monospace 8px')
-                    .style('stroke', "#000").style('marker-start', 'url(#dot)').style('marker-end', 'url(#arrow)');
+                var cg = beamDim.append('g').classed('centerGravity', true)
+                    .style('marker-start', 'url(#dot)').style('marker-end', 'url(#arrow)');
                     cg.append('circle').classed('centerPoint', true)
                     .attr('cx', () => {
                         return x(angleWidth/2);
@@ -839,14 +810,16 @@ define([
                         return y(angleDepth/2);
                     })
                     .attr('r', 5)
-                    .style('fill', 'none');
+                    .style('fill', 'none').style('stroke', '#000');
         
                 cg.append('line').classed('cgy', true).attr('x1', () => { return x(angleWidth/2); }).attr('x2', () => { return x(angleWidth/2); })
-                    .attr('y1', () => { return y(angleDepth/2); }).attr('y2', () => { return y(angleDepth - angleDepth * 0.25); }).style('stroke-dasharray', 3);
+                    .attr('y1', () => { return y(angleDepth/2); }).attr('y2', () => { return y(angleDepth - angleDepth * 0.25); }).style('stroke-dasharray', 3)
+                    .style('stroke', '#000');
 
                 cg.append('line').classed('cgx', true)
                     .attr('x1', () => { return x(angleWidth/2); }).attr('x2', () => { return x(angleWidth - angleWidth * 0.25); })
-                    .attr('y1', () => { return y(angleDepth/2); }).attr('y2', () => { return y(angleDepth/2); }).style('stroke-dasharray', 3);
+                    .attr('y1', () => { return y(angleDepth/2); }).attr('y2', () => { return y(angleDepth/2); }).style('stroke-dasharray', 3)
+                    .style('stroke', '#000');
 
                 cg.append('text').classed('cgxLabel', true)
                     .attr('x', () => { return x(angleWidth - angleWidth * 0.25 + 2); }).attr('y', () => {return y(angleDepth/2)}).style('text-anchor', 'start')

@@ -536,7 +536,11 @@ define([
             fileLoader.ajax('./resources/doc/angleBeamMetric.json')
                 .then((o) => {
                     let angleBeamdata = JSON.parse(o);
-                    console.log(angleBeamdata);
+                    angleBeamdata.forEach((d) => {
+                        var map = new Map();
+                        map.set(Object.keys(d), Object.values(d));
+                        return console.log(map)
+                    });
                     switch (switchAction){
                         case "L98x98x9.5":
                             var data = [
@@ -574,10 +578,61 @@ define([
                                 d.y = +d.y;
                                 console.log(d.x ,d.y);
                             });
+
+                            var angleAreaProp = {
+                                d : angleBeamdata[1].d,
+                                b : angleBeamdata[1].b,
+                                t : angleBeamdata[1].t,
+
+                                sectionOne_area : function() {
+                                    return this.d * this.t;
+                                },
+                                sectionTwo_area : function(){
+                                    return (this.b - this.t) * this.t;
+                                },
+                                sectionOne_y1 : function(){
+                                    return this.d / 2;
+                                },
+                                sectionTwo_y1 : function(){
+                                    return this.t / 2;
+                                },
+                                sectionOne_x1 : function() {
+                                    return this.t / 2;
+                                },
+                                sectionTwo_x1 : function(){
+                                    return (this.b - this.t)/2 + this.t;
+                                },
+                                angleArea : function(){
+                                    return this.sectionOne_area() + this.sectionTwo_area();
+                                },
+                                angleCy : function(){
+                                    return (this.sectionOne_area() * this.sectionOne_y1() + this.sectionTwo_area() * this.sectionTwo_y1()) / (this.angleArea());
+                                },
+                                angleCx : function(){
+                                    return (this.sectionOne_area()*this.sectionOne_x1() + this.sectionTwo_area()*this.sectionTwo_x1()) / (this.angleArea());
+                                },
+                                print : function() {
+                                    var map = new Map();
+                                    map.set('Section One Area', this.sectionOne_area());                                   
+                                    map.set('Ciy Section One', this.sectionOne_y1());
+                                    map.set("Cix Section One", this.sectionOne_x1());
+                                    map.set('Section Two Area', this.sectionTwo_area());
+                                    map.set('Section Two Ciy', this.sectionTwo_y1());
+                                    map.set("Cix Section Two", this.sectionTwo_x1());
+                                    map.set('Area', this.angleArea());
+                                    map.set('Cy', this.angleCy());
+                                    map.set('Cx', this.angleCx());
+                                    for ( var [key, value] of map.entries()){
+                                        console.log(key + ' => ' + value);
+                                    }
+                                    //console.table(map);
+                                }
+                            };
                             x.domain(d3.extent(data, (d) => { return d.x; }));
                             y.domain(d3.extent(data, (d) => { return d.y; }));
                             // update title
                             d3.select('.title').transition().duration(100).delay(25).text(angleBeamdata[1].designation);
+                            d3.select('.title').attr('dy', 2).append('tspan').text('Dimensions are in milimeters');
                             // remove x and y axis
                             d3.selectAll('.axis').transition().duration(100).delay(25).remove();
                             // update shape
@@ -585,6 +640,78 @@ define([
                                 .attr('d', line);
                             //display dimensions and update them
                             d3.select('.dim').style('display', 'block');
+                            // update beam depth
+                            d3.select('.beamHeigthLine').attr('x1', () => { return -graphToolbox.margin.left * 0.25; })
+                                .attr('x2', () => { return -graphToolbox.margin.left * 0.25; })
+                                .attr('y1', () => { return y(angleBeamdata[1].d); })
+                                .attr('y2', () => { return y(0); });
+                            d3.select('.beamHeightLabel').attr('y', () => { return y(angleBeamdata[1].d * 0.5); })
+                                .text('d = '+angleBeamdata[1].d + 'mm');
+
+                            // update beam width
+                            d3.select('.beamWidthLine').attr('x1', () => { return x(0); })
+                                .attr('x2', () => { return x(angleBeamdata[1].b); });
+
+                            d3.select('.beamWidthLabel').attr('x', () => { return x(angleBeamdata[1].b *0.5); })
+                                .text('b = '+angleBeamdata[1].b + 'mm');
+
+                            // update beam thickness
+                            d3.select('.ext_line_upper').attr('y1', () => { return y(angleBeamdata[1].t); })
+                            .attr('y2', () => { return y(angleBeamdata[1].t); });
+
+                            d3.select('.tickLine_above').attr('y1', () => { return y(angleBeamdata[1].t); })
+                            .attr('y2', () => { return y(angleBeamdata[1].t * 2); });
+
+                            d3.select('.tickLine_above_adden').attr('y1', () => { return y(angleBeamdata[1].t * 2); })
+                                .attr('y2', () => { return y(angleBeamdata[1].t * 2); });
+
+                            d3.select('.beamThicknessLabel').attr('y', () => { return y(angleBeamdata[1].t * 2.125); })
+                                .text('t = '+angleBeamdata[1].t+'mm').style('text-anchor', 'middle');
+
+                            d3.select('.centerPoint').attr('cx', () => { return x(angleAreaProp.angleCx()); })
+                                .attr('cy', () => { return y(angleAreaProp.angleCy()); });
+
+                            d3.select('.cgy').attr('x1', () => {
+                                return x(angleAreaProp.angleCx());
+                            })
+                            .attr('x2', () => {
+                                return x(angleAreaProp.angleCx());
+                            })
+                            .attr('y1', () => {
+                                return y(angleAreaProp.angleCy());
+                            })
+                            .attr('y2', () => {
+                                return y(angleBeamdata[1].d - angleBeamdata[1].d * 0.25);
+                            });
+
+                            d3.select('.cgx').attr('x1', () => {
+                                return x(angleAreaProp.angleCx());
+                            })
+                            .attr('x2', () => {
+                                return x(angleBeamdata[1].b - angleBeamdata[1].b * 0.25);
+                            })
+                            .attr('y1', () => {
+                                return y(angleAreaProp.angleCy());
+                            })
+                            .attr('y2', () => {
+                                return y(angleAreaProp.angleCy());
+                            });
+
+                            d3.select('.cgxLabel').attr('x', () => {
+                                return x(angleBeamdata[1].b - angleBeamdata[1].b * 0.25 + 2);
+                            })
+                            .attr('y', () => {
+                                return y(angleAreaProp.angleCy());
+                            }).text('Cx = '+angleAreaProp.angleCx().toFixed(2))
+                            .style('text-anchor', 'start');
+
+                            d3.select('.cgyLabel').attr('x', () => {
+                                return x(angleAreaProp.angleCx());
+                            }).attr('y', () => {
+                                return y(angleBeamdata[1].d - angleBeamdata[1].d * 0.25 +2)
+                            })
+                            .style('text-anchor', 'start')
+                            .text('Cy = ' + angleAreaProp.angleCy().toFixed(2));
                         break;
                     }
                 })
