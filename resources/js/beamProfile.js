@@ -92,7 +92,7 @@ define([
 
                     // Append title
                     g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(graphToolbox.margin.top * 0.5); })
-                        .attr('class', 'title').attr('id', 'title').style('text-anchor', 'end').style('font-size', '10px')
+                        .attr('class', 'title').attr('id', 'title').style('text-anchor', 'middle').style('font-size', '10px')
                         .text("I Beam Metric");
 
                      // Draw Beam
@@ -143,8 +143,8 @@ define([
                             .text('d = ' + distance + ' mm');
 
                         // Ibeam Width 
-                        let iBeamWidthDim = d3.select('#grpRoot').append('g').attr('class', 'iBeamWidthDim').attr('id', 'iBeamWidthDim');
-                        iBeamWidthDim.append('line').attr('class', 'ibeamWidthLine')
+                        
+                        beamDim.append('line').attr('class', 'beamWidthLine')
                             .attr('x1', () => {return x(0); })
                             .attr('x2', () => {
                                 return x(topFlangeWidth);
@@ -158,7 +158,7 @@ define([
                             .style('stroke', '#000').style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)');
 
                         // Ibeam width label
-                        iBeamWidthDim.append('text').attr('class', 'ibeamWidthLabel')
+                        beamDim.append('text').attr('class', 'beamWidthLabel')
                             .attr('x', () => {
                                 return x(topFlangeWidth * 0.5);
                             })
@@ -168,9 +168,8 @@ define([
                             .style('fill', "#000").style('text-anchor', 'middle')
                             .text('b = ' + topFlangeWidth + ' mm');
 
-                        // Ibeam web dim
-                        let iBeamWebDim = d3.select('#grpRoot').append('g').attr('class', 'iBeamWebDim').attr('id', 'iBeamWebDim');
-                        iBeamWebDim.append('line').attr('class', 'iBeamWebLine')
+                        // Ibeam web dim                        
+                        beamDim.append('line').attr('class', 'beamWebLine_right')
                             .attr('x1', () => {
                                 return x(topFlangeWidth * 0.5 - web * 0.5);
                             })
@@ -185,7 +184,7 @@ define([
                             })
                             .style('stroke', '#000').style('marker-start', 'url(#arrow)');
 
-                        iBeamWebDim.append('line').attr('class', 'iBeamWebLine')
+                        beamDim.append('line').attr('class', 'beamWebLine_left')
                             .attr('x1', () => {
                                 return x(topFlangeWidth * 0.5 + web * 0.5);
                             })
@@ -200,7 +199,7 @@ define([
                             })
                             .style('stroke', '#000').style('marker-start', 'url(#arrow)');
 
-                        iBeamWebDim.append('text').attr('class', 'ibeamWebLabel').attr('id', 'dim')
+                        beamDim.append('text').attr('class', 'beamWebLabel').attr('id', 'dim')
                             .attr('x', () => {
                                 return x( (topFlangeWidth * 0.5 + web * 0.5 + 20) / 1 );
                             })
@@ -210,10 +209,9 @@ define([
                             .style('fill', '#000').style('text-anchor', 'start')
                             .text('Web = ' + web + ' mm');
 
-                        // Flange Thickness
-                        var flangeThicknessDim = d3.select('#grpRoot').append('g').classed('flangeThicknessDim', true);
-                            flangeThicknessDim.append('path')
-                                .attr('class', 'flangeThicknessLine').attr('id', 'dim')
+                        // Flange Thickness                        
+                            beamDim.append('path')
+                                .attr('class', 'flangeThicknessLine')
                                 .attr('d', () => {
                                     return `
                                     M ${x(topFlangeWidth * 0.85)}, ${y(distance)}
@@ -225,7 +223,7 @@ define([
                                 .style('marker-start', 'url(#arrow)');
 
                         // Bottom arrow for Flange Thickness
-                        flangeThicknessDim.append('line').attr('id', 'dim').classed('flangeThicknessLineBottom', true)
+                        beamDim.append('line').classed('flangeThicknessLineBottom', true)
                                 .attr('x1', () => {
                                     return x(topFlangeWidth * 0.85);
                                 })
@@ -241,7 +239,7 @@ define([
                                 .style('marker-start', 'url(#arrow)').style('stroke', '#000');
 
                         // Web Label
-                        flangeThicknessDim.append('text')
+                        beamDim.append('text')
                                 .attr('class', 'flangeThicknessLabel')
                                 .attr('x', () => {
                                     return x(topFlangeWidth * 0.85);
@@ -254,9 +252,9 @@ define([
                                 .text('Tk = ' + flangeThickness + ' mm');
 
                         // Center of Gravity
-                        let centerGravity = d3.select('#grpRoot').append('g').attr('id', 'centerGravity').classed('centerGravity', true);
+                        let centerGravity = beamDim.append('g').attr('id', 'centerGravity').classed('centerGravity', true);
                             centerGravity.append('circle')
-                                .attr('class', 'cg_xy').attr('cx', () => {
+                                .attr('class', 'centerPoint').attr('cx', () => {
                                     return x(topFlangeWidth * 0.5)
                                 })
                                 .attr('cy', () => {
@@ -267,8 +265,8 @@ define([
                                 })
                                 .style('fill', 'none').style('stroke', '#000');
 
-                            centerGravity.append('g').attr('class', 'cgm_vert').append('line')
-                                .attr('class', 'cgm_y_axis')
+                            centerGravity.append('line')
+                                .attr('class', 'cgy')
                                 .attr('x1', () => {
                                     return x(topFlangeWidth * 0.5);
                                 })
@@ -283,8 +281,8 @@ define([
                                 })
                                 .style('stroke', '#000').style('marker-end', 'url(#arrow)').style('stroke-dasharray', 2);
 
-                            centerGravity.append('g').attr('class', 'cgm_hor').append('line')
-                                .attr('class', 'cgm_x_axis')
+                            centerGravity.append('line')
+                                .attr('class', 'cgx')
                                 .attr('x1', () => {
                                     return x(topFlangeWidth * 0.5);
                                 })
@@ -299,8 +297,8 @@ define([
                                 })
                                 .style('stroke', '#000').style('marker-end', 'url(#arrow)').style('stroke-dasharray', 2);
 
-                        d3.select('.cgm_hor').append('text')
-                                .attr('class', 'cgm_x_axis_label')
+                            centerGravity.append('text')
+                                .attr('class', 'cx')
                                 .attr('x', () => {
                                     return x(topFlangeWidth * 0.5 + topFlangeWidth * 0.25 + 10);
                                 })
@@ -310,22 +308,26 @@ define([
                                 .style('fill', '#000').style('text-anchor', 'start')
                                 .text('Cx = '+ topFlangeWidth * 0.5 + 'mm');
                         
-                        d3.select('.cgm_vert').append('text')
-                            .attr('class','cgm_y_axis_label')
-                            .attr('x', () => {
-                                return x(topFlangeWidth * 0.5);
-                            })
-                            .attr('y', () => {
-                                return y(distance * 0.5 + distance * 0.25 + 20);
-                            })
-                            .attr('dx', -5)
-                            .style('fill', '#000').style('text-anchor', 'start')
-                            .text('Cy = '+distance * 0.5 +'mm');
-
-                        
+                            centerGravity.append('text')
+                                .attr('class','cy')
+                                .attr('x', () => {
+                                    return x(topFlangeWidth * 0.5);
+                                })
+                                .attr('y', () => {
+                                    return y(distance * 0.5 + distance * 0.25 + 20);
+                                })
+                                .attr('dx', -5)
+                                .style('fill', '#000').style('text-anchor', 'start')
+                                .text('Cy = '+distance * 0.5 +'mm');                        
                     
                 }else{
-                   
+                    // update title
+                    d3.select('.title').transition().duration(100).delay(25).text('W Beam');
+                   //update shape
+                   d3.select('.shape').datum(data).transition().duration(100).delay(30).attr('d', line);
+                   // update x and y axis
+                   d3.select('.x-axis').transition().duration(100).delay(35).call(xAxis.ticks(4));
+                   d3.select('.y-axis').transition().duration(100).delay(36).call(yAxis.ticks(4));
                 }
         },
         drawCChannelMetric: function() {
@@ -391,10 +393,10 @@ define([
             y.domain(d3.extent(data, (d) => { return d.y; }));
 
             if ( document.querySelectorAll('.beam #grpRoot').length == 0  ){           
-                const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+                const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + graphToolbox.margin.left + ',' + graphToolbox.margin.top + ')');
 
                 // Append Title
-                g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(margin.top * 0.5); })
+                g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(graphToolbox.margin.top * 0.5); })
                 .attr('class', 'title').attr('id', 'title').style('text-anchor', 'middle').style('font-size', '10px')
                 .text("C-Channel Beam Metric");
 
@@ -402,55 +404,40 @@ define([
                  g.append('path')
                  .datum(data)
                  .attr('d', line)
-                 .attr('class', 'line')
+                 .attr('class', 'shape')
                  .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
                  .style('fill-rule', 'evenodd').style('stroke', '#000');
                  
                     // append x and y axis
-                    var gx = g.append('g').attr('class', 'axis x-axis').style('font-size', '8px').attr('transform', 'translate(0,' + height + ')')
-                            .call(xAxis.ticks(4));
-                    var gy = g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
-                            .call(yAxis.ticks(4));
+                    g.append('g').attr('class', 'axis x-axis').style('font-size', '8px')
+                    .attr('transform', 'translate(0,' + height + ')')
+                    .call(xAxis.ticks(4));
+                    g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
+                    .call(yAxis.ticks(4));
             }else{
                  
-                d3.select('.line')
-                .datum(data)
+                d3.select('.shape')
+                .datum(data).transition().duration(100).delay(25)
                 .attr('d', line).style('fill-rule', 'evenodd');
                  // clear title and update
                  d3.select('.title').text("");
-                 d3.select('.title').text("C-Channel Beam Metric");
+                 d3.select('.title').transition().duration(100).delay(50).text("C-Channel Beam Metric");              
 
-                 var g = d3.select('#grpRoot');
-
-                 x.domain(d3.extent(data, (d) => { return d.x; }));
-                 y.domain(d3.extent(data, (d) => { return d.y; }));
-
-                  //clear x and y axis, then reappend
-                  //d3.selectAll('.axis').remove();
-                  // append x and y axis
-                    /*var gx = g.append('g').attr('class', 'x-axis').style('font-size', '8px').attr('transform', 'translate(0,'+height+')')
-                            .call(xAxis);
-                    var gy = g.append('g').attr('class', 'y-axis').style('font-size', '8px')
-                            .call(yAxis);*/
-
-                    let gx = d3.select('.x-axis').call(xAxis.ticks(4));
-                    let gy = d3.select('.y-axis').call(yAxis.ticks(4));
-                  
+                d3.select('.x-axis').transition().duration(100).delay(55).call(xAxis.ticks(4));
+                d3.select('.y-axis').transition().duration(100).delay(75).call(yAxis.ticks(4));                  
             }
 
                     
         },
         drawHssMetric: function() {            
-            const svg = d3.select('.beam').attr('width', 225).attr('height', 225)
+            const svg = d3.select('.beam').attr('width', () => {
+                return graphToolbox.SVGProp.width;
+            }).attr('height', () => {
+                return graphToolbox.SVGProp.height;
+            })
             .style('display', 'block'),
-            margin = {
-                top : 25,
-                bottom : 25,
-                left : 25,
-                right : 25
-            },
-            width = +svg.attr('width') - margin.left - margin.right,
-            height = +svg.attr('height') - margin.top - margin.bottom,
+            width = +svg.attr('width') - graphToolbox.margin.left - graphToolbox.margin.right,
+            height = +svg.attr('height') - graphToolbox.margin.top - graphToolbox.margin.bottom,
             x = d3.scaleLinear().range([0, width]),
             y = d3.scaleLinear().range([height, 0]),
             xAxis = d3.axisBottom(x),
@@ -514,10 +501,10 @@ define([
 
             //Check if root group hans been created
             if ( document.querySelectorAll('.beam #grpRoot').length == 0 ){
-                const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+                const g = svg.append('g').attr('id', 'grpRoot').attr('transform', 'translate(' + graphToolbox.margin.left + ',' + graphToolbox.margin.top + ')');
 
                 // Append Title
-                g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(margin.top * 0.5); })
+                g.append('text').attr('x', () => { return width * 0.5; }).attr('y', () => { return -(graphToolbox.margin.top * 0.5); })
                 .attr('class', 'title').attr('id', 'title').style('text-anchor', 'middle').style('font-size', '10px')
                 .text("HSS Beam Metric");
 
@@ -525,7 +512,7 @@ define([
                 g.append('path')
                 .datum(data)
                 .attr('d', line)
-                .attr('class', 'line')
+                .attr('class', 'shape')
                 .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
                 .style('fill-rule', 'evenodd').style('stroke', '#000');
 
@@ -535,28 +522,16 @@ define([
                 var gy = g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
                     .call(yAxis.ticks(4));
             }else {
-                 // clear all unwanted dom elements
-                d3.select('.line').transition().duration(100).delay(50).remove();
+                 
+                d3.select('.shape').datum(data)
+                .transition().duration(100).delay(50).attr('d', line);
 
                 // clear title and update
                 d3.select('.title').text("");
-                d3.select('.title').text("HSS Beam Metric");
-
-                var g = d3.select('#grpRoot');
-
-                x.domain(d3.extent(data, (d) => { return d.x; }));
-                y.domain(d3.extent(data, (d) => { return d.y; }));
-                 // Draw Beam
-                 g.append('g').attr('id', 'line')
-                 .append('path')
-                 .datum(data)
-                 .attr('d', line)
-                 .attr('class', 'line')
-                 .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
-                 .style('fill-rule', 'evenodd').style('stroke', '#000');
+                d3.select('.title').text("HSS Beam Metric");                
                 
-                let gx = d3.select('.x-axis').call(xAxis);
-                let gy = d3.select('.y-axis').call(yAxis.ticks(4));
+                d3.select('.x-axis').call(xAxis);
+                d3.select('.y-axis').call(yAxis.ticks(4));
             }
         },
         drawAngleMetric: function() {
@@ -657,7 +632,7 @@ define([
                 .style('font-size', '8px')
                 .call(xAxis.ticks(4));
 
-                g.append('g').attr('class', 'yaxis axis').style('font-size', '8px')
+                g.append('g').attr('class', 'y-axis axis').style('font-size', '8px')
                 .attr('transform', 'translate(' + (-graphToolbox.margin.left * 0.25) + ',' + 0 +')')
                 .call(yAxis.ticks(4));                
 
@@ -832,8 +807,12 @@ define([
                 d3.select('.title').transition().duration(100).delay(25).text("Equal Legged Angle");
 
                 // update path                
-                d3.select('.line').datum(angleBeamData)
+                d3.select('.shape').datum(angleBeamData).transition().duration(100).delay(50)
                 .attr('d', line);
+
+                // update x and y axis
+                d3.select('.x-axis').transition().duration(100).delay(80).call(xAxis.ticks(4));
+                d3.select('.y-axis').transition().duration(100).delay(75).call(yAxis.ticks(4));
             }
         }   
     }    
