@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Stress-Strain Analysis</title>
+    <link rel="stylesheet" href="./resources/css/main.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="header">Stress-Strain Analysis And Beam Shapes Properties</h1>
+        </header>
+        <nav class="main-nav">
+            <ul class="dropdownMenu">
+                <li class="home"><a href="index.html">Home</a></li>
+                <li class="about"><a href="#">About Me</a></li>
+            </ul>
+        </nav>
+        <div class="sideMenu">
+            <label for="sys_int_units" class="siu" id="siu">Units:
+                <select name="sys_int_units" id="sys_int_units">
+                    <option value="none">Please select</option>
+                    <option value="mm">mm</option>
+                    <option value="inches">inches</option>
+                </select>
+            </label>
+           
+            <label for="beam_shape" class="shapes">Shape:
+                <select name="beam_shape" id="beam_shape"></select>
+            </label>
+            <label for="beam_designation" class="desig">Desig:
+                <select name="beam_designation" id="beam_designation">                    
+                </select>
+            </label>
+            <svg class="beam" id="beam" 
+                xmlns="http://www.w3.org/2000/svg" 
+                xmlns:xlink="http://www.w3.org/1999/xlink" 
+                baseProfile="full"
+                viewBox="0 0 225 225"
+                reserveAspectRatio="xMinYMin meet"
+                style="position: relative; top: 5px; left: 5px; display: none;">
+            </svg>
+        </div>
+        <section class="content" id="content">
+            <div class="pageContent">
+                <div class="beam-card" id="beam-card"></div>                
+                <div class="graph" id="graph"></div>
+                <div class="report" id="report"></div>
+            </div>
+        </section>
+        <footer class="footer"></footer>
+    </div>
+    <script data-main="./resources/js/app" src="./resources/js/lib/requirejs/require.js"></script>
+</body>
+</html>

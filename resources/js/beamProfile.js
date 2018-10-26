@@ -345,6 +345,9 @@ define([
             yAxis = d3.axisLeft(y),
             line = d3.line().x( (d) => { return x(d.x); }).y( (d) => { return y(d.y); });
 
+            var d = 102.00,
+            b = 43.00,
+            t = 7.50;
             var data = [
                 {
                     x: 0, 
@@ -408,12 +411,43 @@ define([
                  .style('fill', '#ccc').style('shape-rendering', 'optimizeSpeed')
                  .style('fill-rule', 'evenodd').style('stroke', '#000');
                  
-                    // append x and y axis
-                    g.append('g').attr('class', 'axis x-axis').style('font-size', '8px')
+                // append x and y axis
+                g.append('g').attr('class', 'axis x-axis').style('font-size', '8px')
                     .attr('transform', 'translate(0,' + height + ')')
                     .call(xAxis.ticks(4));
-                    g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
+                g.append('g').attr('class', 'axis y-axis').style('font-size', '8px')
                     .call(yAxis.ticks(4));
+
+                // dimensions
+                var beamDim = g.append('g').classed('dim', true).style('display', 'block');
+                // Beam Depth : d
+                beamDim.append('line').classed('beamHeightLine', true)
+                .attr('x1', () => {
+                    return (-graphToolbox.margin.left * 0.25);
+                })
+                .attr('x2', () => {
+                    return (-graphToolbox.margin.left * 0.25);
+                })
+                .attr('y1', () => {
+                    return y( d );
+                })
+                .attr('y2', () => {
+                    return y(0);
+                }).style('marker-start', 'url(#arrow)').style('marker-end', 'url(#arrow)')
+                .style('stroke', '#000');
+
+                beamDim.append('text').classed('beamHeightLabel', true)
+                .attr('x', () => {
+                    return (-graphToolbox.margin.left * 0.5);
+                })
+                .attr('y', () => {
+                    return y ( b );
+                })
+                .style('text-anchor', 'middle')
+                .attr('transform', 'rotate(90' + ',' + (-graphToolbox.margin.left * 0.5) + ' ,' + y( ( d / 2 ) ) + ')')
+                    .text('d = ' + d + ' mm');
+
+                
             }else{
                  
                 d3.select('.shape')

@@ -1,57 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Stress-Strain Analysis</title>
-    <link rel="stylesheet" href="./resources/css/main.css">
+    <meta name="description" content="this website is created in order to bring the fore my work experience and hobbies">
+    <meta name="author" content="Wellington Oronsaye">
+    <link rel="stylesheet" href="./resources/css/aboutMe.css">
+    <link href="https://fonts.googleapis.com/css?family=Tangerine:bold|Lobster|Pacifico|Noto+Sans" rel="stylesheet">
+    <title>My Hobbies & Work Experience</title>
 </head>
+
 <body>
-    <div class="container">
-        <header class="header">
-            <h1 class="header">Stress-Strain Analysis And Beam Shapes Properties</h1>
-        </header>
+    <div class="wrapper">
         <nav class="main-nav">
             <ul class="dropdownMenu">
-                <li class="home"><a href="index.html">Home</a></li>
-                <li class="about"><a href="#">About Me</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Beam</a>
+                    <ul>
+                        <li><a href="beam.html">Beam Shape</a></li>
+                    </ul>
+                </li>
             </ul>
         </nav>
         <div class="sideMenu">
-            <label for="sys_int_units" class="siu" id="siu">Units:
-                <select name="sys_int_units" id="sys_int_units">
-                    <option value="none">Please select</option>
-                    <option value="mm">mm</option>
-                    <option value="inches">inches</option>
-                </select>
-            </label>
-           
-            <label for="beam_shape" class="shapes">Shape:
-                <select name="beam_shape" id="beam_shape"></select>
-            </label>
-            <label for="beam_designation" class="desig">Desig:
-                <select name="beam_designation" id="beam_designation">                    
-                </select>
-            </label>
-            <svg class="beam" id="beam" 
-                xmlns="http://www.w3.org/2000/svg" 
-                xmlns:xlink="http://www.w3.org/1999/xlink" 
-                baseProfile="full"
-                viewBox="0 0 225 225"
-                reserveAspectRatio="xMinYMin meet"
-                style="position: relative; top: 5px; left: 5px; display: none;">
-            </svg>
+
         </div>
-        <section class="content" id="content">
-            <div class="pageContent">
-                <div class="beam-card" id="beam-card"></div>                
-                <div class="graph" id="graph"></div>
-                <div class="report" id="report"></div>
-            </div>
-        </section>
-        <footer class="footer"></footer>
-    </div>
-    <script data-main="./resources/js/app" src="./resources/js/lib/requirejs/require.js"></script>
+        <div class="page">
+            <h1>my work experience and hobbies</h1>
+            <section class="box1">
+                <img src="./resources/img/LCP.jpg" alt="Wellington" class="prog" width="200" height="100">
+                <h2>personal summary</h2>
+                <p>
+                    My names are Wellington Oronsaye, I was trained as a mechanical engineer in conception and design
+                    at engineering School of Geneva (Ecole d'Ingenieur de Geneve) Switzerland.
+                </p>
+                <p>
+                    Ever since I moved to Canada, I have been working as a mechanical / civil engineering technician on
+                    several hydroelectric power dam Projects that span across the globe.
+                </p>
+                <p>
+                    I am highly efficient, hardworking mechanical / civil engineering technologist. Very skillfull in
+                    the use of several CAD tools,
+                    that is used in creating 3D and 2D models.
+                </p>
+                <p>
+                    I have 11 years working experience in many high profile hydroelectric power projects. I posses a
+                    good team spirit
+                    and able to liaise with different departments and personnel.
+                </p>
+                <p>
+                    I am keen to finding a challenging and suitable engineering position with an establishment that
+                    offers opportunities
+                    for career development and advancement.
+                </p>
+                <hr />
+                <h2>work experience</h2>
+                <em>Astaldi Canada Inc.</em><br>
+                <em>civil Engineering Technologist November 3, 2014</em>
+                <p>Rendering technical support to construction crew at the Muskrat Falls Project.</p>
+                <em>Duties:</em>
+                <ul class="dutiesList">
+                    <li>
+                        <p>
+                            Produce 2D drawings with Autocad 2018 for the formwork, supper structures and rebars for the powerhouse,
+                            spill-way, retaining walls, drilling platform for rock anchors,
+                            formwork for mini and mega dome and vehicle wash bay foundation.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Produce set of layouts detailing design related to earthwork, roads and plan location for
+                            infrastructures.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Prepare winterization schedules for the construction procedures.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Check sub-contractors drawings for errors and conformity with Nalcor's standard.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Produce single line diagram for the grounding of the Tower Crane, Permanent and Temporary 
+                            Bridge and Tailrace.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Prepare schematics and single line diagram showing the connection of new trailers to NL/Hydro main grid.
+                        </p>
+                    </li>
+                </ul>
+                <hr>
+                <em>Amec & Foster Wheeler Inc.</em><br>
+                <em>Mechanical Engineering Technologist     January 10, 2014 to October 2014</em>
+                <p>
+                    Used autocad and Inventor to produce both 2D and 3D drawings for the Voisy's Bay underground Mining Project.
+                </p>
+                <em>Duties:</em>
+                <ul class="dutiesList">
+                    <li>
+                        <p>
+                            Prepare 2D drawings for the underground mining facilities: Maintainance Shop, Explosive Magazine,
+                            Detonator Magazine, Refuge Station for 24 and 12 persons. Fuel/Lube Bay, Pipe Support Hangers for 
+                            Service Water and Dewatering System, Typical Collection Sumps and Main Pumping Station, Typical Latrine,
+                            Ventilation Doors with Bulkhead and Personnel Airlock Doors and link chain fence.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Produce PFD flow diagram for service water and dewatering system.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Produce PRV (Pressure Relief Valve) Station.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Produce P&ID for Sag Mill, Pebble Crusher, Tailing Thickener, Reagents, Warm Water and Process and Wast Water.
+                        </p>
+                    </li>
+                </ul>
+                <em>SNC-Lavalin Inc.</em><br>
+                <em>Civil Engineering Technologist      May 7, 2012 to December 2014</em><br>
+                <p>Used Autocad 2014 and Catia V5 R6 to produce 2D and 3D models for the Muskrat Falls Hydroelectric Power Project</p>
+                <em>Duties:</em>
+            </section>
+        </div>
+        <div class="footer">
+            <span>About Me</span>
+        </div>
 </body>
+
 </html>

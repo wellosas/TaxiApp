@@ -42,13 +42,25 @@ define([
                 return;
             }else if (s1.options[selIndex].text == "W") {
                 beamProfile.drawIbeamMetric();
-                fileLoader.ajax('./resources/doc/wBeamMetric.json')
+                /*d3.json('./resources/doc/beamGeoProp.json', (d) => {
+                     console.log(d.BeamsGeometricData[0].data[0]);
+
+                    var wBeam = d.BeamsGeometricData[0].data;
+
+                    for( var i in  wBeam )
+                    {
+                        var newOption = document.createElement('option')
+                            newOption.innerHTML = wBeam[i];
+                            s2.options.add(newOption);
+                    }
+                });*/
+               fileLoader.ajax('./resources/doc/wBeamMetric.json')
                     .then((e) => { 
                         var wBeam = JSON.parse(e);
                         for(var i in wBeam){
                             var newOption = document.createElement('option')
                             newOption.innerHTML = wBeam[i].designation;
-                            s2.options.add(newOption);
+                            s2.options.add(newOption);                           
                         }                       
                      })
                     .catch((err) => { return console.log(err); });

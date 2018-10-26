@@ -1,0 +1,28 @@
+{
+    "BeamsGeometricData" : [{
+        "name" : "metricWbeam",
+        "data" : [
+            {"designation" : "Please choose", "d" : 0, "b" : 0, "w" : 0, "k1" : 0, "k" : 0, "shape" : "w"},
+            {"designation" : "W920x967", "d" : 1028, "b" : 446, "w" : 50, "k1" : 55, "k" : 121, "shape" : "w"},
+            {"designation" : "W920x784", "d" : 996, "b" : 437, "w" : 40.90, "k1" : 50, "k" : 105, "shape" : "w"},
+            {"designation" : "Please choose", "d" : 0, "b" : 0, "w" : 0, "k1" : 0, "k" : 0, "shape" : "w"}
+        ]
+    },
+    {
+        "name" : "metricAngle",
+        "data" : [
+
+        ]
+    },
+    {
+        "name" : "metricCchannel",
+        "data" : [
+            
+        ]
+    }, {
+        "name" : "metricHss",
+        "data" : [
+            
+        ]
+    }]
+}
