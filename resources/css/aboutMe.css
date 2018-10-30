@@ -23,7 +23,7 @@ body {
     display: grid;
     grid-gap: 2px;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1% 98% 1%;
+    grid-template-rows: 30px 980px 30px;
     grid-template-areas:
         "nav nav nav"
         "sideMenu pad pad"
@@ -109,7 +109,7 @@ li a {
 .dropdown {
     position: absolute;
     width: 150px;
-    top: 31px;
+    top: 29px;
     opacity: 0;
     visibility: hidden;
     transition: ease-out .35s;
